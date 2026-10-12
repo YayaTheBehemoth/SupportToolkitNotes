@@ -9,7 +9,7 @@ Manually inspect noncompliant devices across customer tenants and document tenan
 Tenant-grouped exceptions with device identity, compliance reason, evidence timestamp, last check-in and triage category. Missing evidence must never be silently classified as compliant.
 
 ## October 2026 discovery
-- Microsoft Graph application registration permissions and consent remain a bottleneck.
+
 - Managed-tenants requests returned `400 Request not applicable to target tenant`; exact cause is unresolved.
 - Presence of a delegated `scp` claim does not establish eligibility or application authorization.
 - Lighthouse web UI was inaccessible for multiple operators on several occasions, including October 9 and 12. This is an observation, not proof of a Microsoft-wide outage.
