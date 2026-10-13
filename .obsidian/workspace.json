@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Development Journal - 2026-10-12.md",
+                "file": "Compliance/Discovery/2026-10-13-Graph-Quick-Discovery.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Development Journal - 2026-10-12"
+              "title": "2026-10-13-Graph-Quick-Discovery"
             }
           }
         ]
@@ -192,19 +192,21 @@
   "active": "621ee2563e6b32d9",
   "lastOpenFiles": [
     "Compliance/Discovery.md",
+    "Modules/BackupAggregator.md",
+    "Modules/Compliance Monitor.md",
+    "Modules/Endpoint Triage Ideas.md",
+    "Development Journal - 2026-10-12.md",
+    "Compliance/Discovery/2026-10-13-Graph-Quick-Discovery.md",
+    "Compliance/Discovery",
     "Architecture and Decisions.md",
     "file:C:/Users/allan/Downloads/COMPLIANCE-Graph-Quick-Discovery-2026-10-13 (1).md",
-    "Development Journal - 2026-10-12.md",
     "Development Timeline.md",
     "Project Overview.md",
     "Public Documentation Safety.md",
     "Roadmap.md",
     "Ticketing and Configuration.md",
     "Modules/BackupHealth.md",
-    "Modules/BackupAggregator.md",
     "Home.md",
-    "Modules/Endpoint Triage Ideas.md",
-    "Modules/Compliance Monitor.md",
     "Modules",
     "gitignore.md",
     "Untitled.canvas",
