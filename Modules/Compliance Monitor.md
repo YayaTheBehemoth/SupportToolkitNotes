@@ -26,3 +26,21 @@ Tenant-grouped exceptions with device identity, compliance reason, evidence time
 Do not bypass tenant authorization or transfer production customer data to personal/public repositories.
 
 Related: [[Roadmap]], [[Development Journal - 2026-10-12]].
+
+
+## Operational workflow discovery — consolidated 2026-10-13
+
+**Evidence status:** First-hand understanding is strongest for **investigation**. Follow-up, remediation, verification and closure remain operational discovery topics.
+
+- A compliance alert is not a uniform task: its cause determines whether the next step is technical action, customer contact or additional evidence collection.
+- Investigation can involve checking last device activity and documenting whether a device has become active again.
+- Cases awaiting a customer response or device activity can be deferred. An on-hold state requires a deadline, but a standard duration has **not** been established.
+- Some cases are closed, some remain pending and some resurface for review. The rules that determine these outcomes have not been validated.
+
+### Scope for an initial fixture-driven module
+
+Automate **evidence gathering and investigation summaries** first. Preserve the human distinction between investigation, follow-up, remediation, verification and closure. Do not infer a case lifecycle state, assign a deadline, close a case or prescribe remediation automatically from incomplete workflow observations.
+
+This is a sanitized process abstraction; it intentionally omits customer/case details and internal operational procedures.
+
+Related: [[Development Journal - 2026-10-13]].
