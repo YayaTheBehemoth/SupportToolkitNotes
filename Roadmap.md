@@ -46,3 +46,26 @@ Compliance remains in discovery until operational and technical requirements are
 - [ ] Reusable sanitized data-anonymization helpers when justified.
 
 Related: [[Ticketing and Configuration]], [[Architecture and Decisions]], [[Compliance Monitor]].
+
+## October 14 discovery milestones
+
+### Compliance fixture development
+- [x] Reported: exception-first device list using synthetic Graph responses.
+- [x] Reported: setting-level evidence, collection diagnostics and readable investigation reports.
+- [ ] Add missing-device scenarios.
+- [ ] Add conflicting-evidence scenarios.
+- [ ] Add incomplete-observation scenarios and assert explicit uncertainty.
+- [ ] Independently establish authorized live Graph access and completeness.
+
+### Backup monitoring entitlement
+- [x] Reported: four production validation comparisons for existing BackupAggregator reporting.
+- [x] Identify commercial subscription management as operational entitlement source.
+- [x] Reject scheduled-report configuration as monitoring entitlement authority.
+- [ ] Inspect authorized, read-only subscription export and sanitize findings.
+- [ ] Determine service records, status/effective-date rules and stable customer references.
+- [ ] Investigate existing cross-system identity/provisioning references.
+- [ ] Decide whether export-based integration is adequate or authorized API access is needed.
+- [ ] Implement a narrowly scoped fixture-backed entitlement provider **only after** requirements discovery.
+- [ ] Ensure unknown/unmatched scope cannot silently exclude customers.
+
+Related: [[Development Journal - 2026-10-14]].
