@@ -38,3 +38,12 @@ The public application README and local.config.example.json need to be updated f
 Production and trial observations repeatedly expose assumptions that local fixtures and initial implementations cannot prove.
 
 Related: [[Ticketing and Configuration]], [[Development Journal - 2026-10-12]], [[Roadmap]].
+
+## October 14, 2026
+
+- Compliance: reported working fixture-driven exception list, setting-level evidence, collection diagnostics and investigation reports. Next: missing, conflicting and incomplete evidence scenarios; live authorization remains separate.
+- BackupAggregator: reported fourth successful production comparison run. Monitoring entitlement emerged as a separate requirement from backup inventory.
+- Scheduler configuration was investigated and rejected as an entitlement source; exploratory integration was not merged.
+- Commercial subscription records identified as operational entitlement source; authorized read-only export and cross-system identity discovery planned. No production monitoring-scope integration implemented.
+
+Related: [[Development Journal - 2026-10-14]].
