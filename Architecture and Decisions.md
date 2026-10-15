@@ -75,3 +75,15 @@ Idempotency is bounded retry protection, not permanent deduplication. Direct CLI
 See [source README](https://github.com/YayaTheBehemoth/SupportToolkit/blob/main/README.md).
 
 Related: [[Ticketing and Configuration]], [[Roadmap]].
+
+## Data authority and workflow separation — 2026-10-14
+
+**Decision:** Monitoring entitlement must be independent of backup resource inventory and scheduled-report delivery configuration. Commercial records determine eligibility; backup data determines resource state; operational reporting decides presentation and follow-up. Exact entitlement rules remain to be discovered.
+
+**Proposed, not implemented:** a monitoring-scope provider that can initially use synthetic fixtures, potentially a validated read-only export, or an authorized API later. Do not introduce a global provider abstraction before a concrete need is demonstrated.
+
+**Cross-system identity:** no shared identifier is confirmed. Investigate existing references and integrations before adopting name matching or maintaining a manual registry. Unmatched identities are explicit exceptions, not silently excluded records.
+
+**Compliance boundary:** synthetic Graph-backed exception lists, setting evidence, diagnostics and investigation reports are a development milestone, not proof of production Graph authorization or completeness. Preserve separation between collection, interpretation and case lifecycle action.
+
+Related: [[Modules/BackupAggregator]], [[Modules/Compliance Monitor]], [[Development Journal - 2026-10-14]].
