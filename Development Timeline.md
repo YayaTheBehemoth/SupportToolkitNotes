@@ -16,6 +16,7 @@ Retrospective chronology; dates approximate where no exact commit date was estab
 | Oct 12–13 | Zendesk connection-scoped destinations, explicit group routing, resolver and provider tests |
 | Oct 13 | Synthetic trial routing validation; wizard connection-reuse usability correction |
 | Oct 13 | Zendesk destination routing merged into SupportToolkit main |
+| Oct 15 | Business Central subscription discovery and unmerged, fixture-driven entitlement evaluation, selection and scoped backup inventory execution |
 
 ## Zendesk routing observations
 
@@ -47,3 +48,13 @@ Related: [[Ticketing and Configuration]], [[Development Journal - 2026-10-12]], 
 - Commercial subscription records identified as operational entitlement source; authorized read-only export and cross-system identity discovery planned. No production monitoring-scope integration implemented.
 
 Related: [[Development Journal - 2026-10-14]].
+
+## October 15, 2026
+
+- Business Central UI discovery verified the subscription header/line relationship and a representative customer join. Active and blocked examples showed line presence and a blank end date are insufficient to establish entitlement.
+- No supported API/export or cross-provider customer identity mechanism was confirmed.
+- The unmerged monitoring-scope code branch now contains a fixture evaluator, a tenant selector and selected-tenant backup inventory execution.
+- Local CLI output reported three selected healthy synthetic inventory reviews and two unresolved-scope cases; scope completeness correctly remained false.
+- Existing production all-tenant inventory and ticketing remain unchanged. Next dependency: a read-only data-access and stable-reference discussion with BC development.
+
+Related: [[Development Journal - 2026-10-15]].

@@ -80,10 +80,26 @@ Related: [[Ticketing and Configuration]], [[Roadmap]].
 
 **Decision:** Monitoring entitlement must be independent of backup resource inventory and scheduled-report delivery configuration. Commercial records determine eligibility; backup data determines resource state; operational reporting decides presentation and follow-up. Exact entitlement rules remain to be discovered.
 
-**Proposed, not implemented:** a monitoring-scope provider that can initially use synthetic fixtures, potentially a validated read-only export, or an authorized API later. Do not introduce a global provider abstraction before a concrete need is demonstrated.
+**As of October 14:** a fixture-backed monitoring-scope provider was proposed. On October 15, a disconnected fixture evaluator, tenant selector and scoped inventory execution path were implemented on an unmerged feature branch. An authorized production Business Central provider remains unimplemented.
 
 **Cross-system identity:** no shared identifier is confirmed. Investigate existing references and integrations before adopting name matching or maintaining a manual registry. Unmatched identities are explicit exceptions, not silently excluded records.
 
 **Compliance boundary:** synthetic Graph-backed exception lists, setting evidence, diagnostics and investigation reports are a development milestone, not proof of production Graph authorization or completeness. Preserve separation between collection, interpretation and case lifecycle action.
 
 Related: [[Modules/BackupAggregator]], [[Modules/Compliance Monitor]], [[Development Journal - 2026-10-14]].
+
+## Monitoring-scope boundaries — 2026-10-15
+
+The implemented **fixture-only** pipeline is:
+`subscription evidence → conservative entitlement assessment → independently resolved customer identity → Acronis tenant selection → inventory review`.
+
+- Entitlement and backup resource health are distinct. Scope selection precedes resource collection rather than hiding completed report rows.
+- Absence, ambiguity or conflicting evidence cannot silently establish non-entitlement. The selector preserves unresolved tenants and unmatched commercial observations.
+- `Inventory complete`, `scope complete` and `overall complete` are separate assertions. Successful selected inventory does not mean all monitoring responsibility has been resolved.
+- Identity links in fixtures are fictional. There is no validated automatic BC-to-Acronis reconciliation or permanent production mapping registry.
+- The scoped service method reuses existing inventory concurrency and failure handling. The normal all-tenant production workflow and ticketing were not changed.
+- A read-only BC transport guard exists, but approved production endpoints, authentication/consent and exact API payloads remain unknown. No production BC access has been demonstrated.
+
+Design guardrail: do not wire commercial filtering or external ticket side effects to these fixture results until authoritative access, entitlement rules, identity completeness and unresolved-case behavior are validated.
+
+Related: [[Development Journal - 2026-10-15]], [[Modules/BackupAggregator]].
