@@ -44,3 +44,13 @@ Automate **evidence gathering and investigation summaries** first. Preserve the 
 This is a sanitized process abstraction; it intentionally omits customer/case details and internal operational procedures.
 
 Related: [[Development Journal - 2026-10-13]].
+
+## Fixture-driven implementation milestone — 2026-10-14
+
+**Reported implemented against synthetic Graph responses:** exception-first device list, setting-level evidence, collection diagnostics and readable investigation reports.
+
+These capabilities are independently testable without production Graph authorization. They do **not** prove live API access, tenant coverage, permission sufficiency or completeness of production observations.
+
+**Next fixture milestone:** missing devices, conflicting evidence and incomplete observations. Preserve provenance and diagnostics so uncertainty cannot be mistaken for compliance. Operational case lifecycle decisions remain out of scope pending discovery.
+
+Related: [[Development Journal - 2026-10-14]].
