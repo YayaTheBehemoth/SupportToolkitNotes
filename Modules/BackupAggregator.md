@@ -31,7 +31,7 @@ Related: [[BackupHealth]], [[Ticketing and Configuration]].
 
 ## Teams/Groups workload accounting — October 16, 2026
 
-**Status:** Bugfix implemented in the local SupportToolkit working copy, with automated tests and limited production comparison reported passing. **Not yet assumed committed, merged, or released.**
+**Status:** Bugfix and regression tests observed on SupportToolkit `main` (2026-10-16), with local and production comparison reported passing. Release status not inferred.
 
 ### Observed discrepancy
 
@@ -44,7 +44,7 @@ Two anonymized customer comparisons exposed undercounting after Microsoft 365 no
 
 - The larger tenant returned **136 unique Microsoft 365 resource records** and no device resources; the old normalizer reduced the report to 131.
 - Acronis's **All Groups → Team** column showed exactly five linked Groups. An independent second tenant showed exactly one, matching its discrepancy.
-- Read-only, debug-only diagnostics confirmed five `GROUP` resources whose logical identity matched a `TEAM`, and five unmapped `teamName` string fields. Matching Groups had absent top-level `hasProtections` values, so that flag was **not** adopted as the consolidation criterion.
+- Read-only, debug-only diagnostics confirmed five `GROUP` resources whose logical identity matched a `TEAM`, and five unmapped `teamName` string fields. Matching Groups had top-level `hasProtections=true` in the observed diagnostic sample; protection flags were **not** adopted as the consolidation criterion because they do not establish workload identity.
 - The `All devices` inventory need not list Microsoft 365 cloud workloads. In the mixed-workload case, the single discovered device was consistent with an existing, successfully protected server-backed NAS-file plan; no separate NAS-specific bug was established.
 
 ### Root cause and targeted fix
@@ -66,6 +66,35 @@ Changes reported locally:
 Conduct a focused audit of Acronis DTOs and vendor semantics *after* this fix is finalized. Candidate topics: `basicKinds` mixed protection flags, `hasCompositeProtections`, identifier/deduplication semantics, nullable paging and malformed responses, and whether undocumented v1 endpoints expose richer association metadata. Do not transfer fields from the public v4 Resource Management API into the console-facing v1 DTOs without payload verification.
 
 Keep real tenant identifiers, resource names, credentials, raw responses, and internal access details out of public documentation.
+
+## Acronis provider contract audit — October 16, 2026
+
+**Working branch:** `audit/acronis-provider-contracts` (local; not presumed pushed). The operator reports `dotnet test` passing after each of the following incremental changes.
+
+### Contract and completeness hardening
+
+- Synthetic Microsoft 365 JSON contract tests cover explicitly empty/null collections, `teamName` mapping, protection evidence, and opaque paging cursor deserialization.
+- A provider safeguard distinguishes an *absent* `data`/`items` collection property from a present but explicit `null` or empty array. Former now fails a review; latter retains observed valid-empty behavior.
+- Repeated continuation cursors now fail promptly rather than reaching the existing 500-page cap; no cursor values are placed into diagnostics.
+- These are locally tested changes on the audit branch, **not yet claimed merged or released**.
+
+### Temporary pagination probe — production observations
+
+An authorized, explicitly enabled, read-only probe of one anonymized M365 tenant inspected **six leaf groups**, **10 page responses**, and **three multi-page groups**. All six terminal pages had `paging.cursors` present and no `after` token. Aggregate M365 collection: **183 raw rows, 136 unique resources**.
+
+Within one sampled three-page leaf group (30 + 30 + 12 = **72** rows), three continuation styles were compared:
+
+| Continuation style | Observation |
+| --- | --- |
+| Existing `?after=<cursor>` | Three pages, 72 rows |
+| `?limit=30&after=<cursor>` | Three pages, 72 rows; same identity multiset and order as existing |
+| `?limit=30&order=asc(last_task_status)&after=<cursor>` | HTTP 400; shadow comparison failure did not affect authoritative report |
+
+**Decision:** Preserve the existing `?after=` continuation behavior. General Acronis pagination guidance should not be assumed to describe this console-facing v1 resource-manager endpoint. Preserve permissive final-page `paging` handling for now: all six observed terminal responses contained it, but that is insufficient evidence to require it for every tenant. The alternative-query comparison was performed on **one** group, not the whole tenant.
+
+**Cleanup required:** Remove the temporary opt-in probe code and its probe-specific tests before completing the audit. Retain the permanent collection-presence, repeated-cursor guards and their tests.
+
+**Still open:** Invalid or missing leaf-group metadata, identifier-based deduplication and divergent health evidence, `basicKinds`/`hasCompositeProtections` semantics, and the remaining device/tenant DTO review. Production logs and identifiers are intentionally omitted.
 
 ## Monitoring entitlement discovery and fixture development — October 14–15, 2026
 
