@@ -29,6 +29,44 @@ One historical tool result reported 49 healthy resources while a portal view rep
 
 Related: [[BackupHealth]], [[Ticketing and Configuration]].
 
+## Teams/Groups workload accounting — October 16, 2026
+
+**Status:** Bugfix implemented in the local SupportToolkit working copy, with automated tests and limited production comparison reported passing. **Not yet assumed committed, merged, or released.**
+
+### Observed discrepancy
+
+Two anonymized customer comparisons exposed undercounting after Microsoft 365 normalization:
+
+| Anonymized case | Acronis protected workloads | Previous SupportToolkit count | Team-associated Groups in Acronis | Corrected SupportToolkit count |
+| --- | ---: | ---: | ---: | ---: |
+| Small mixed-workload tenant | 16 | 15 | 1 | 16 |
+| Larger Microsoft 365 tenant | 136 | 131 | 5 | 136 |
+
+- The larger tenant returned **136 unique Microsoft 365 resource records** and no device resources; the old normalizer reduced the report to 131.
+- Acronis's **All Groups → Team** column showed exactly five linked Groups. An independent second tenant showed exactly one, matching its discrepancy.
+- Read-only, debug-only diagnostics confirmed five `GROUP` resources whose logical identity matched a `TEAM`, and five unmapped `teamName` string fields. Matching Groups had absent top-level `hasProtections` values, so that flag was **not** adopted as the consolidation criterion.
+- The `All devices` inventory need not list Microsoft 365 cloud workloads. In the mixed-workload case, the single discovered device was consistent with an existing, successfully protected server-backed NAS-file plan; no separate NAS-specific bug was established.
+
+### Root cause and targeted fix
+
+The previous normalizer collapsed a `GROUP` and `TEAM` whenever their `GROUP.<key>` / `TEAM.<key>` identities matched. This conflated *Team association* with *a duplicate protected workload*.
+
+Changes reported locally:
+
+1. Map the observed `teamName` response property to nullable `AcronisMicrosoft365ResourceDto.TeamName`.
+2. Preserve a matching `GROUP` as an independent monitored workload when `teamName` is populated.
+3. Retain the prior consolidation and health-evidence merge for matching Groups with missing/blank `teamName`, along with upstream provider deduplication of genuinely repeated resource identities.
+4. Add synthetic regression tests for the one-Group and five-Group count patterns, independently failing linked Groups, absent protection evidence, and legacy consolidation.
+5. Remove the temporary relationship-discovery instrumentation after the contract was established.
+
+**Validation reported:** `dotnet build` and `dotnet test` green after the change and cleanup. Authorized read-only production reviews returned the expected **16** and **136** counts. The operator reported **no newly unexpected `Unclassified` or `Require attention` outcomes**. No broader estate-wide equivalence is claimed.
+
+### Follow-up kept separate
+
+Conduct a focused audit of Acronis DTOs and vendor semantics *after* this fix is finalized. Candidate topics: `basicKinds` mixed protection flags, `hasCompositeProtections`, identifier/deduplication semantics, nullable paging and malformed responses, and whether undocumented v1 endpoints expose richer association metadata. Do not transfer fields from the public v4 Resource Management API into the console-facing v1 DTOs without payload verification.
+
+Keep real tenant identifiers, resource names, credentials, raw responses, and internal access details out of public documentation.
+
 ## Monitoring entitlement discovery and fixture development — October 14–15, 2026
 
 **Context:** Four successful production comparisons were reported for the existing all-tenant backup inventory and exception report. These do **not** validate entitlement filtering or Business Central connectivity.
