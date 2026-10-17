@@ -17,7 +17,7 @@ dotnet run --project src/SupportToolkit -- backup-aggregator ticket submit
 
 SupportToolkit separates three responsibilities:
 
-1. **Profile:** Runtime modes, write permission and selected provider destinations.
+1. **Profile:** Per-module runtime modes, reusable provider references and one selected Zendesk destination.
 2. **Connection:** Named external instance and non-secret connection metadata.
 3. **Destination:** A named Zendesk group belonging to one connection.
 
@@ -60,7 +60,6 @@ All instance names, client values and IDs below are fictional. This is a fragmen
     "zendesk-dev": {
       "zendeskConnection": "trial",
       "zendeskDestination": "dev",
-      "allowWrites": false,
       "modules": { "backup-aggregator": "fixture" }
     }
   }
@@ -79,7 +78,7 @@ The resolver obtains the active profile's connection and destination before cons
 - Changing the Zendesk instance using ZENDESK_SUBDOMAIN is rejected when it conflicts with the configured connection.
 - Changing a connection's subdomain through the wizard clears its existing group mappings.
 - The Zendesk provider requires a positive destination group ID.
-- External writes require explicit permission, with a documented environment override.
+- Ticket creation requires an explicitly invoked submit operation, resolved connection and valid destination; interactive submission additionally requires confirmation.
 
 These checks do not guarantee that Zendesk business rules preserve a submitted group assignment.
 
@@ -102,7 +101,7 @@ dotnet run --project src/SupportToolkit -- configure use zendesk-dev
 
 - Zendesk tickets are created with private comments by the current provider.
 - The narrow Zendesk transport supports ticket creation, not general-purpose mutation.
-- Write permission defaults to disabled; direct CLI submission has no additional confirmation prompt.
+- There is no separate `AllowWrites` switch. The direct CLI submit command is an explicit write without an additional confirmation prompt; interactive submission asks for confirmation.
 - The deterministic idempotency key includes ticket source, content and destination identity (Zendesk instance and group).
 - Different groups or instances generate different keys for otherwise identical ticket contents.
 - Idempotency only protects within the provider's supported retention window; it is not permanent duplicate-ticket prevention.
@@ -129,3 +128,16 @@ A Zendesk group routes/assigns tickets; a view filters tickets for operators. Ne
 Preserve the dotnet run workflow and fixture onboarding for non-developers.
 
 Related: [[Architecture and Decisions]], [[Roadmap]], [[BackupAggregator]].
+
+## Audit 2 closure — October 17, 2026
+
+**Source:** SupportToolkit branch `audit/acronis-provider-contracts`; not asserted merged or released.
+
+- Configurations now support keeping existing locally valid Acronis/Zendesk connections without repeating setup; Zendesk destinations support numbered selection with the existing choice as default. Saving another profile does not silently activate it; first-time onboarding still activates the first profile.
+- Retired the redundant `AllowWrites` configuration and environment permission flag. Legacy configuration loading still tolerates the former field, and saving drops it. Submission remains an explicit operator operation with required Zendesk destination routing; the interactive UI additionally confirms the instance/group selection.
+- Zendesk trial verification included a successfully routed synthetic ticket and an idempotent replay showing the existing ticket identifier and link. Provider idempotency is bounded by its retention behavior; unconfirmed write outcomes require reconciliation before retrying. Organizational deployment was not established.
+- Added fail-closed behavior for zero-customer discovery, incomplete tenant reviews, inconsistent resource accounting and ambiguous Zendesk outcomes; operators receive clear partial-result reporting rather than false success.
+- Operational logging redacts UUIDs and line breaks; tenant-failure debug diagnostics and top-level debug exception chains omit raw exception messages and stack traces. This is not blanket anonymization of production output.
+- The README was refreshed to reflect these behaviors. The operator reported a successful build, **251 passing automated tests**, zero failures/skips, clean whitespace checks and a clean working tree after the final test-only rationalization. The test suite was reduced from 265 to 251 cases while retaining the key contract, pagination, security and submission failure scenarios. These counts are operator-reported local validation, not a live integration test.
+
+**Decision:** Audit 2 implementation and test-rationalization work is ready for branch integration review; merge and release remain user-owned decisions. Longer-term work includes validating vendor pagination variants and organization-specific Zendesk routing and automation behavior.
