@@ -141,3 +141,8 @@ Related: [[Architecture and Decisions]], [[Roadmap]], [[BackupAggregator]].
 - The README was refreshed to reflect these behaviors. The operator reported a successful build, **251 passing automated tests**, zero failures/skips, clean whitespace checks and a clean working tree after the final test-only rationalization. The test suite was reduced from 265 to 251 cases while retaining the key contract, pagination, security and submission failure scenarios. These counts are operator-reported local validation, not a live integration test.
 
 **Decision:** Audit 2 implementation and test-rationalization work is ready for branch integration review; merge and release remain user-owned decisions. Longer-term work includes validating vendor pagination variants and organization-specific Zendesk routing and automation behavior.
+
+
+### Integration status — October 17, 2026
+
+The user completed a **fast-forward merge** of `audit/acronis-provider-contracts` into `main` and pushed `origin/main`. GitHub verification confirms `main` at commit `5705aa5` (`refactor(config): separate profile lifecycle and provider setup`). The local `main` working tree was clean and synchronized after the push. The final structural refactor reorganized `ConfigureCommand` partial files without intentionally changing runtime behavior; the operator reported the full **251-test suite green** after the small active-profile confirmation-message fix. **This is a merged development baseline, not a newly published release.** Branch deletion, if desired, remains user-owned.
