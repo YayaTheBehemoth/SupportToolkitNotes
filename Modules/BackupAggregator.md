@@ -119,6 +119,19 @@ The second tenant's portal displayed **52 protected workloads**. SupportToolkit 
 
 **Decision:** Leave the M365 normalizer unchanged pending genuine evidence of mixed or negative M365 protection signals. Keep the distinction between portal *protected workloads* and SupportToolkit *all inventoried resources*. Remove the temporary protection probe and its probe-only tests after local validation. The two unusual unprotected resources are **parked for operator follow-up with a colleague**, not a product defect or a trigger to change classification. Their configuration and ownership have not been confirmed. The desired operational behavior is to surface potentially uncommunicated backup changes for investigation; current CLI reporting alone does not create a lasting shared support record, which will require the separate Zendesk workflow.
 
+### Device inventory contract audit — October 17, 2026
+
+The device endpoint (`/bc/api/resource_manager/v1/epm/resources`) has its own DTO and pagination contract; it must not be assumed equivalent to the console-facing Microsoft 365 endpoint.
+
+- The operator reported green local build and test results after adding a **missing/explicit-null `items` collection guard** (an explicit empty array stays valid). Unlike M365, `items:null` has not been established as a valid device response.
+- Added focused, locally green tests for immediate repeated continuation cursors, longer cursor cycles, and successful synthetic three-page traversal. Existing `after`-only continuation remains unchanged.
+- An opt-in read-only diagnostic examined one production tenant: **one device page, zero device rows, `paging.cursors` present and no `after` token**. The same combined tenant report checked 103 resources, sourced from other backup inventory. This run **did not validate multi-page device behavior**.
+- Operational discovery indicates that no known customer has anything approaching 30 Acronis device resources, so a useful real multi-page device case is not currently available. No artificial production test or customer hunting is justified.
+
+**Decision:** Keep the working device continuation query, collection guard, and cycle protection; document multi-page device pagination as **fixture-tested only, not production-verified**. Remove the temporary device pagination probe and probe-specific tests after cleanup. Do not restore the older provider from a commit that predates the permanent device hardening.
+
+**Open:** Verify actual device status/agent DTO field types and operational meanings, investigate nullable paging only when evidence requires it, and review the remaining tenant/group contract assumptions. The unusual unprotected resources from an earlier tenant review remain a separate operator follow-up.
+
 ## Monitoring entitlement discovery and fixture development — October 14–15, 2026
 
 **Context:** Four successful production comparisons were reported for the existing all-tenant backup inventory and exception report. These do **not** validate entitlement filtering or Business Central connectivity.
