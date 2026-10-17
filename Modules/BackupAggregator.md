@@ -92,9 +92,17 @@ Within one sampled three-page leaf group (30 + 30 + 12 = **72** rows), three con
 
 **Decision:** Preserve the existing `?after=` continuation behavior. General Acronis pagination guidance should not be assumed to describe this console-facing v1 resource-manager endpoint. Preserve permissive final-page `paging` handling for now: all six observed terminal responses contained it, but that is insufficient evidence to require it for every tenant. The alternative-query comparison was performed on **one** group, not the whole tenant.
 
-**Cleanup required:** Remove the temporary opt-in probe code and its probe-specific tests before completing the audit. Retain the permanent collection-presence, repeated-cursor guards and their tests.
+**Pagination cleanup:** The operator reported all tests green after removing the temporary probe and probe-only tests; permanent completeness checks and cursor-cycle guards remain.
 
-**Still open:** Invalid or missing leaf-group metadata, identifier-based deduplication and divergent health evidence, `basicKinds`/`hasCompositeProtections` semantics, and the remaining device/tenant DTO review. Production logs and identifiers are intentionally omitted.
+### Duplicate-record diagnostic (October 17)
+
+A read-only, observation-only diagnostic on the already fetched anonymized M365 inventory reported 183 raw rows and 136 unique identities. There were 47 duplicate-identity groups, 47 surplus rows, and no rows without a usable identity. All compared fields matched across duplicate instances: zero groups with differing health evidence, Team-association fields, timestamps, or names. The diagnostic compared selected DTO fields, not entire raw JSON responses.
+
+**Decision:** Keep last-representation-wins deduplication for now; no disagreement was observed to justify a merge policy. This is evidence for this sample only, not a guarantee across customers or API revisions. The operator reported green tests after removing the temporary probe and its tests.
+
+**Next:** Investigate the meanings of `hasProtections`, `basicKinds`, and `hasCompositeProtections` before changing classification. Also review leaf metadata and other provider DTOs.
+
+
 
 ## Monitoring entitlement discovery and fixture development — October 14–15, 2026
 
