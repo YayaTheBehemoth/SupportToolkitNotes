@@ -132,6 +132,20 @@ The device endpoint (`/bc/api/resource_manager/v1/epm/resources`) has its own DT
 
 **Open:** Verify actual device status/agent DTO field types and operational meanings, investigate nullable paging only when evidence requires it, and review the remaining tenant/group contract assumptions. The unusual unprotected resources from an earlier tenant review remain a separate operator follow-up.
 
+### Device status evidence — October 17, 2026
+
+An authorized, opt-in read-only diagnostic reused the normal device inventory of one anonymized tenant; no extra API calls or classification changes.
+
+- **5 device records**: 3 with `status.state=idle`, 2 with `status.state=notProtected`, none missing status.
+- All five had both `lastBackup` and `lastSuccessBackup`, with **equal values** in every record. The two `notProtected` devices nonetheless had prior successful-backup timestamps. The normalizer correctly prioritizes current `notProtected` state over backup history.
+- `appliedPolicyNames`, `nextBackupPolicy`, and `nextBackup` were each populated on 3 of the 5 devices; DTO deserialization succeeded for this sample.
+- The combined inventory from the earlier review can now be accounted for as **49 Microsoft 365 resources + 5 device resources = 54 checked**, including 52 Healthy and 2 Requires attention. The two unprotected device states align with the two exceptions; individual resource identities were not matched by the diagnostic.
+- No `idle`/`ok` device with `lastBackup` newer than `lastSuccessBackup` was observed. Whether an old success plus a more recent unsuccessful attempt may be misclassified remains **unverified**.
+
+**Decision:** Preserve device health classification for the observed cases; do not infer that historical success means current protection. The two unusual device entries remain an operational follow-up with a colleague, not a confirmed application defect. The temporary status diagnostic and its probe-only tests should be removed after validation, restoring the clean device provider from the pushed device-hardening commit on the audit branch.
+
+**Open:** Establish vendor field-type variation and semantic meaning beyond the sampled five device records (including nullable/alternate policy fields and time ordering); continue tenant and group DTO completeness work without introducing speculative production rules.
+
 ## Monitoring entitlement discovery and fixture development — October 14–15, 2026
 
 **Context:** Four successful production comparisons were reported for the existing all-tenant backup inventory and exception report. These do **not** validate entitlement filtering or Business Central connectivity.
