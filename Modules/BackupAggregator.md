@@ -158,6 +158,18 @@ An explicitly enabled, read-only JSON-token diagnostic inspected **one page and 
 
 **Decision:** The inspected production shapes support the existing device DTO field types. No DTO or normalizer change is justified by this sample. **Limitations:** Five records from one tenant do not establish a complete vendor contract, and the allowlisted probe does not verify all unmapped JSON fields or vendor semantics. Remove the temporary response-shape probe and probe-only tests, retaining the permanent device collection and pagination safeguards. Continue with tenant/M365-group response contracts.
 
+### Microsoft 365 group-discovery response shape — October 17, 2026
+
+An authorized, opt-in, read-only JSON-shape diagnostic examined the M365 group-list response of the anonymized tenant previously validated with **136 M365 resource records**. The diagnostic did not add API calls or change group selection.
+
+- Response root was an object with `data` as an array; `items` was absent. **13 group objects**, no non-object rows.
+- **6 groups had `leaf=true`; 7 had `leaf=false`**; no missing, null, or non-Boolean leaf flags.
+- All **13 group IDs were valid UUID strings**; none missing or invalid, including among leaf groups. Therefore the existing filter (`leaf==true` and valid UUID) selected six queryable groups without silently excluding a malformed candidate in this sample.
+- `accountId`, `parentId`, `groupKind`, `kind`, `type` were strings in all 13; `groupType` was numeric; `custom` Boolean; `resource_types` an array, matching current DTO types.
+- The seven non-leaf groups were not queried by design. The observed response and independently validated 136-resource count support the current group-discovery behavior for this tenant, but cannot establish all vendor semantics or that non-leaf groups never contain relevant resources in other setups.
+
+**Decision:** Do not change M365 group DTOs or leaf selection based on this observation. Remove the temporary group-shape probe and its probe-only tests after successful local cleanup; preserve permanent provider completeness and pagination guards. Continue with tenant-discovery and legacy hierarchy response-contract validation. Sanitized aggregate field counts only—no customer/group names or IDs retained.
+
 ## Monitoring entitlement discovery and fixture development — October 14–15, 2026
 
 **Context:** Four successful production comparisons were reported for the existing all-tenant backup inventory and exception report. These do **not** validate entitlement filtering or Business Central connectivity.
