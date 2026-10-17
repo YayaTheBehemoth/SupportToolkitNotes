@@ -104,6 +104,21 @@ A read-only, observation-only diagnostic on the already fetched anonymized M365 
 
 
 
+### Protection-state probe — October 17, 2026
+
+An explicitly enabled, read-only diagnostic examined two anonymized production tenant inventories using data already fetched by the M365 provider; it did not change classification or collection requests.
+
+| Observed case | M365 resources | `hasProtections=true` | All `basicKinds` flags true | `hasCompositeProtections=false` | `hasCompositeProtections` absent | Mixed or contradictory protection signals |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Larger all-healthy M365 tenant | 136 | 136 | 136 | 72 | 64 | 0 |
+| Mixed protected/unprotected inventory tenant | 49 | 49 | 49 | 37 | 12 | 0 |
+
+Both samples exhibited successful M365 task evidence for every observed M365 resource. The `hasCompositeProtections=false` values appeared on USER resources even when other protection and task indicators were positive. This supports **not** treating the composite flag as a general protected/unprotected indicator. It does **not** establish its full vendor semantics or validate existing `protection_conflict` handling for partially protected M365 objects.
+
+The second tenant's portal displayed **52 protected workloads**. SupportToolkit reported **54 resources checked: 52 healthy, 2 requiring attention (displayed as Not protected), 0 unclassified**. The M365 probe found 49 M365 resources with successful and positive protection evidence. The extra two unprotected entries plausibly originate from device inventory, but the diagnostic did not confirm their source. The operator noted that this tenant uses an unusual backup setup; the exact setup is not established.
+
+**Decision:** Leave the M365 normalizer unchanged pending genuine evidence of mixed or negative M365 protection signals. Keep the distinction between portal *protected workloads* and SupportToolkit *all inventoried resources*. After local cleanup, remove the temporary protection probe and probe-only tests. Investigate device exceptions separately before attributing them to a particular setup.
+
 ## Monitoring entitlement discovery and fixture development — October 14–15, 2026
 
 **Context:** Four successful production comparisons were reported for the existing all-tenant backup inventory and exception report. These do **not** validate entitlement filtering or Business Central connectivity.
