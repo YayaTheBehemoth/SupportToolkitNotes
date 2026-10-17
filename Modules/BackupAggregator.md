@@ -233,3 +233,8 @@ Related: [[Development Journal - 2026-10-15]], [[Architecture and Decisions]], [
 **Remaining validation limits:** production v2 tenant discovery returned one page (81 objects, including 39 manually portal-verified customers), so live multi-page v2 continuation remains unproven; the device endpoint's multi-page continuation has only synthetic coverage. Organizational Zendesk triggers, routing, write authorization and notifications remain unvalidated. The historical portal/API count discrepancy should not be declared resolved by unrelated sample comparisons.
 
 **Decision:** Close Audit 2 implementation and test cleanup as locally validated. Merge/release stays with the user. Monitoring-entitlement scope and Compliance remain separate discovery-stage work.
+
+
+### Audit integration — October 17, 2026
+
+Audit 1 provider-contract safeguards, Audit 2 operational hardening, test-fixture rationalization and the configuration source-file reorganization were integrated by the user into SupportToolkit `main` using a fast-forward merge. Verified `origin/main` HEAD: `5705aa5`. The operator reported 251 passing tests and a clean working tree at merge time. This confirms branch integration, not a new release or broader live Acronis/Zendesk validation. All vendor-specific limitations recorded above still apply.
