@@ -146,6 +146,18 @@ An authorized, opt-in read-only diagnostic reused the normal device inventory of
 
 **Open:** Establish vendor field-type variation and semantic meaning beyond the sampled five device records (including nullable/alternate policy fields and time ordering); continue tenant and group DTO completeness work without introducing speculative production rules.
 
+### Device JSON shape evidence — October 17, 2026
+
+An explicitly enabled, read-only JSON-token diagnostic inspected **one page and five device resource objects** in an anonymized production tenant before typed DTO deserialization. The review completed, with **zero non-object items and zero decode failures**. The diagnostic made no extra API requests and emitted only predefined field names and token-type counts.
+
+- Page `items` was an array, `paging` an object, `paging.cursors` an object, and `after` absent on the final page.
+- `id`, `name`, `displayName`, and `type` were strings on all five records; `status` and `agent` were objects. Both `agent.id` and `agent.name` were strings.
+- `status.state`, `status.appliedPolicyNames`, and `status.lastAction` were strings on all five. Despite its plural name, `appliedPolicyNames` appeared as a **string**, not an array, in this sample.
+- `status.nextBackupPolicy` was a string in three records, missing in two; `nextBackup` was a parseable date string in three, missing in two.
+- `lastActionTime`, `lastBackup`, `lastSuccessActionTime`, and `lastSuccessBackup` appeared as parseable date strings in all five; no invalid date strings were observed.
+
+**Decision:** The inspected production shapes support the existing device DTO field types. No DTO or normalizer change is justified by this sample. **Limitations:** Five records from one tenant do not establish a complete vendor contract, and the allowlisted probe does not verify all unmapped JSON fields or vendor semantics. Remove the temporary response-shape probe and probe-only tests, retaining the permanent device collection and pagination safeguards. Continue with tenant/M365-group response contracts.
+
 ## Monitoring entitlement discovery and fixture development — October 14–15, 2026
 
 **Context:** Four successful production comparisons were reported for the existing all-tenant backup inventory and exception report. These do **not** validate entitlement filtering or Business Central connectivity.
