@@ -217,3 +217,19 @@ dotnet run --project src/SupportToolkit -- dev scoped-backup-review
 **Next handoff:** Ask BC development whether these records are already exposed through a supported authenticated read-only API, service or export, and whether a stable external customer reference is already available.
 
 Related: [[Development Journal - 2026-10-15]], [[Architecture and Decisions]], [[Roadmap]].
+
+## Audit 2 — operational hardening closure (October 17, 2026)
+
+**Code scope:** SupportToolkit `audit/acronis-provider-contracts`, validated locally but not asserted merged or released. This audit followed the separate Acronis provider contract investigations above.
+
+- All-customer discovery yielding zero customers now fails rather than allowing a misleading zero-result success. Per-tenant failures are isolated, reported as incomplete and represented by a nonzero raw CLI result; valid partial findings remain visible.
+- Backup ticket creation rejects incomplete review coverage and inconsistent normalized resource accounting; healthy resource detail can be suppressed without losing accounting.
+- Zendesk ticket preview is read-only, while submission requires an explicitly configured connection and destination. The interactive console confirms the resolved ticket destination. Successful live trial routing and an idempotent replay were reported for a personal trial environment, not an organizational deployment.
+- Idempotent replay reporting shows the existing ticket. POST outcomes that cannot be confirmed must not be blindly retried; provider-window idempotency is not permanent deduplication.
+- Configuration no longer contains the retired global `AllowWrites` permission switch. Existing Acronis/Zendesk connection configuration can be retained in the wizard; Zendesk destinations have numbered selection. Editing a different profile does not silently activate it.
+- Debug information now redacts UUIDs, reduces multiline injection, and reports structured exception types/HTTP statuses rather than arbitrary exception messages and raw stack traces. Console reports remain potentially sensitive.
+- After fixture consolidation and deliberate pruning of duplicate checks, the operator reported **251 passing automated tests, zero failures/skips, successful local build and clean Git status**. The starting suite for the pruning stage had 265 cases. Fixture tests validate application behavior, not unobserved live vendor contracts.
+
+**Remaining validation limits:** production v2 tenant discovery returned one page (81 objects, including 39 manually portal-verified customers), so live multi-page v2 continuation remains unproven; the device endpoint's multi-page continuation has only synthetic coverage. Organizational Zendesk triggers, routing, write authorization and notifications remain unvalidated. The historical portal/API count discrepancy should not be declared resolved by unrelated sample comparisons.
+
+**Decision:** Close Audit 2 implementation and test cleanup as locally validated. Merge/release stays with the user. Monitoring-entitlement scope and Compliance remain separate discovery-stage work.
