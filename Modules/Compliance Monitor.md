@@ -1,6 +1,6 @@
 # Compliance Monitor
 
-**Status: discovery / proposed, not implemented.**
+**Status update (2026-10-20): synthetic reporting/investigation is implemented on a separate feature branch, not released or validated against live Graph.**
 
 ## Problem
 Manually inspect noncompliant devices across customer tenants and document tenant, device, reason and next action. Lighthouse CSV exports provide limited views.
@@ -54,3 +54,7 @@ These capabilities are independently testable without production Graph authoriza
 **Next fixture milestone:** missing devices, conflicting evidence and incomplete observations. Preserve provenance and diagnostics so uncertainty cannot be mistaken for compliance. Operational case lifecycle decisions remain out of scope pending discovery.
 
 Related: [[Development Journal - 2026-10-14]].
+
+## October 20 — Independent reporting MVP
+
+Operational observations of numerous automated, recurring and duplicate compliance tickets led to prioritizing a consolidated **Intune-based exception-first tenant report** over reconciling Lighthouse ticket identities. The feature branch contains synthetic device and evidence investigation plus a consolidated multi-tenant `compliance report` with explicit failed collection handling. It is not production-authorized Graph acquisition; no case lifecycle automation or ticket writes are in scope. Subscription-based monitoring scope via BC remains a candidate separate integration pending access and identity verification. See [[Strategy Checkpoint - 2026-10-20]].
