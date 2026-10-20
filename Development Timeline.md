@@ -58,3 +58,12 @@ Related: [[Development Journal - 2026-10-14]].
 - Existing production all-tenant inventory and ticketing remain unchanged. Next dependency: a read-only data-access and stable-reference discussion with BC development.
 
 Related: [[Development Journal - 2026-10-15]].
+
+## October 17–20, 2026 — Stabilization and release progression
+
+- October 17: Core audits, provider hardening and configuration refactoring were integrated into `main` at `5705aa5`; **251 automated tests passing** was reported for this stabilized checkpoint.
+- October 18–19: That baseline was released as Windows prerelease `v0.2.3`. Compliance and BC feature work remained on separate branches.
+- October 19: `v0.2.4` was published with a focused Teams/SharePoint workload accounting correction and additional regression tests (`fc56e15`). GitHub comparison on October 20 confirms `v0.2.4` matches `main`.
+- Organizational Zendesk integration and end-to-end production ticketing were still pending confirmation; Acronis production-data validation and personal Zendesk trial validation are separate evidence.
+
+Related: [[Modules/BackupAggregator]], [[Strategy Checkpoint - 2026-10-20]].
