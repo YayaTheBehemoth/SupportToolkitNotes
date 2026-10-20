@@ -19,8 +19,9 @@ Preserve fixture development, module/provider boundaries, explicit external-writ
 
 ## Current engineering snapshot
 
-- User-reported public Windows release: **v0.2.3**, from stabilized main checkpoint `5705aa5`, previously validated with **251** reported tests.
-- Code repository main subsequently received an additional Microsoft 365 Teams/SharePoint backup accounting change (`fc56e15`). Do not conflate that change with the published tag.
+- **Latest verified Windows prerelease: `v0.2.4`** (published October 19, 2026). GitHub confirms that its tag matches current `main` at the time of this checkpoint.
+- `v0.2.3` was the stabilized core baseline (`5705aa5`) with **251 operator-reported passing tests**. `v0.2.4` adds commit `fc56e15`, tightening Teams/SharePoint workload accounting in BackupAggregator with regression tests. The older test count must not be presented as a fresh `v0.2.4` test run.
+- The accounting change distinguishes Team-associated Groups with independently protected SITE workloads from Groups whose mailbox evidence should be consolidated with a Team. The implemented rule is deliberately narrow; it does not prove all possible vendor response shapes have been validated.
 - BackupAggregator: production Acronis collection tested; ticketing routed successfully in a personal Zendesk trial. Authorized organizational Zendesk end-to-end validation was **pending** at this checkpoint.
 - Compliance development branch: fixture-driven exception list, setting-level evidence, diagnostics, investigation, and a consolidated synthetic multi-tenant `compliance report`. Live Graph access/completeness and production scope remain unverified.
 - BC monitoring-scope branch: synthetic subscription header/line assessment, conservative tenant selection and scoped inventory execution. Read-only production exposure, entitlement semantics and BC-to-provider identity mapping remain unverified.
