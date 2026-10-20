@@ -238,3 +238,13 @@ Related: [[Development Journal - 2026-10-15]], [[Architecture and Decisions]], [
 ### Audit integration — October 17, 2026
 
 Audit 1 provider-contract safeguards, Audit 2 operational hardening, test-fixture rationalization and the configuration source-file reorganization were integrated by the user into SupportToolkit `main` using a fast-forward merge. Verified `origin/main` HEAD: `5705aa5`. The operator reported 251 passing tests and a clean working tree at merge time. This confirms branch integration, not a new release or broader live Acronis/Zendesk validation. All vendor-specific limitations recorded above still apply.
+
+## Release v0.2.4 — October 19, 2026
+
+Published Windows prerelease `v0.2.4` includes commit `fc56e15` (`fix(backup-aggregator): correct Teams and SharePoint workload accounting`) on top of the `v0.2.3` stabilized core baseline. At the October 20 checkpoint, GitHub reports `main` identical to the `v0.2.4` tag.
+
+**Change:** Team-associated Group records are not always separate SharePoint workloads. The normalizer now uses narrowly defined component-protection evidence to determine whether an associated Group contributes mailbox coverage to a matching Team or represents an independently protected SITE workload. Failure/unknown evidence from consolidated entries must remain visible rather than disappear behind a healthy Team.
+
+**Validation boundary:** Regression tests cover independent SITE protection and representative workload counts. The rule is grounded in observed production discrepancies but does not establish that every Acronis resource shape or tenant configuration has been tested. This is a normalization and accounting correction, not a new endpoint or a company Zendesk end-to-end validation.
+
+Related: [[Strategy Checkpoint - 2026-10-20]].
