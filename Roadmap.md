@@ -4,7 +4,18 @@ Working backlog, not commitments.
 
 Implementation status is grounded in the SupportToolkit source repository and tests. Discovery and architectural findings are tracked in these notes.
 
-## Current
+## Priorities revised October 20, 2026
+
+- [ ] Finish synthetic, multi-tenant, exception-first Compliance reporting with explicit collection failures.
+- [ ] Seek authorized organizational Zendesk end-to-end validation; do not assume a personal test proves organizational behavior.
+- [ ] Confirm read-only BC subscription exposure and stable customer identity independently of feature development.
+- [ ] Test synthetic Power Automate approval/rejection **as a proof of concept**; production deployment and scheduling are not prerequisites.
+- [ ] Create a sanitized BackupAggregator process-engineering case study (before/after, technical decisions, measured evidence where available).
+- [ ] Maintain one Obsidian/GitHub Notes source of truth; avoid manually duplicated Copilot documents.
+
+**Deferred:** No universal deployment, hosting, operator UI or persistence architecture until concrete module needs and approved operating environments are understood. Older items below are historical backlog entries and may be stale. See [[Strategy Checkpoint - 2026-10-20]].
+
+## Earlier backlog
 
 - [ ] Resolve authorized Graph/Intune access and tenant discovery.
 - [ ] Validate one authorized tenant's compliance data and create synthetic fixtures.
