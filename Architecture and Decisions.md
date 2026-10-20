@@ -103,3 +103,7 @@ The implemented **fixture-only** pipeline is:
 Design guardrail: do not wire commercial filtering or external ticket side effects to these fixture results until authoritative access, entitlement rules, identity completeness and unresolved-case behavior are validated.
 
 Related: [[Development Journal - 2026-10-15]], [[Modules/BackupAggregator]].
+
+## October 20 — Deployment architecture intentionally deferred
+
+The approval POC discussion expanded from one reviewable ticket draft into hypothetical decisions about scheduling, multi-user deployment, storage and replacing the CLI. This is premature given differing module requirements. **Decision:** keep a small synthetic approval experiment, preserve the current modular CLI and security boundaries, and defer a common hosting/interface architecture until concrete operational requirements justify it. See [[Strategy Checkpoint - 2026-10-20]].
