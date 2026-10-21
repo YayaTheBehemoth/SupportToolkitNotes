@@ -32,7 +32,7 @@ A confusing wizard flow exposed the difference between a connection name and a d
 
 Idempotency protection depends on the Zendesk retention window. Organizational Zendesk behavior has not been validated.
 
-The public application README and local.config.example.json need to be updated for the new routing configuration.
+*Resolved October 22:* the README and `local.config.example.json` were updated for the routing configuration. See [[Documentation Checkpoint - 2026-10-22]].
 
 ## General theme
 
@@ -67,3 +67,20 @@ Related: [[Development Journal - 2026-10-15]].
 - Organizational Zendesk integration and end-to-end production ticketing were still pending confirmation; Acronis production-data validation and personal Zendesk trial validation are separate evidence.
 
 Related: [[Modules/BackupAggregator]], [[Strategy Checkpoint - 2026-10-20]].
+
+## October 21–22, 2026
+
+- October 21: `CLAUDE.md` added to `main` (`83a7bf1`) with engineering workflow and Git-ownership rules; Compliance and Business Central branches merged `main` to pick it up.
+- October 21 (evening): Business Central branch commit `6513b79` added a read-only Business Central provider with delegated sign-in, a `dev bc-subscriptions --production` diagnostic and an opt-in `backup-aggregator scoped-review`. No validated production read is recorded.
+- October 22: documentation refresh of the README, example configuration and these notes. See [[Documentation Checkpoint - 2026-10-22]].
+
+## Release dates
+
+| Version | Date |
+|---|---|
+| `v0.1.0` | 2026-10-09 |
+| `v0.2.0` | 2026-10-11 |
+| `v0.2.1` | 2026-10-11 |
+| `v0.2.2` | 2026-10-13 |
+| `v0.2.3` | 2026-10-17 (tag date is that of commit `5705aa5`; release published October 18–19 per the October 20 checkpoint) |
+| `v0.2.4` | 2026-10-19 |

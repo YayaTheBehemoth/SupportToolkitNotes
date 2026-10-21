@@ -12,6 +12,9 @@ Implementation status is grounded in the SupportToolkit source repository and te
 - [ ] Test synthetic Power Automate approval/rejection **as a proof of concept**; production deployment and scheduling are not prerequisites.
 - [ ] Create a sanitized BackupAggregator process-engineering case study (before/after, technical decisions, measured evidence where available).
 - [ ] Maintain one Obsidian/GitHub Notes source of truth; avoid manually duplicated Copilot documents.
+- [x] Refresh the source README, example configuration and Notes to match `v0.2.4` and the feature branches (October 22). See [[Documentation Checkpoint - 2026-10-22]].
+- [ ] Keep the CLI command catalogue (Claude project space) in step with command changes.
+- [ ] Record a fresh `dotnet test` result for `v0.2.4`; the `251` figure belongs to `v0.2.3`.
 
 **Deferred:** No universal deployment, hosting, operator UI or persistence architecture until concrete module needs and approved operating environments are understood. Older items below are historical backlog entries and may be stale. See [[Strategy Checkpoint - 2026-10-20]].
 
@@ -20,9 +23,9 @@ Implementation status is grounded in the SupportToolkit source repository and te
 - [ ] Resolve authorized Graph/Intune access and tenant discovery.
 - [ ] Validate one authorized tenant's compliance data and create synthetic fixtures.
 - [ ] Investigate the historical Acronis 49-vs-44 count discrepancy.
-- [ ] Verify a clean Windows ZIP release installation.
+- [ ] Verify a clean Windows ZIP release installation. (Release workflow already validates extraction and startup; a manual clean-machine check is still open.)
 - [ ] Keep fixture schemas aligned with observed API behavior.
-- [ ] Update the SupportToolkit README and local.config.example.json for Zendesk destinations.
+- [x] Update the SupportToolkit README and local.config.example.json for Zendesk destinations. (Done October 22, local edit; see [[Documentation Checkpoint - 2026-10-22]].)
 
 ## Ticketing
 
@@ -50,7 +53,7 @@ Compliance remains in discovery until operational and technical requirements are
 
 ## Later candidates
 
-- [ ] Clear fixture-mode onboarding documentation.
+- [ ] Clear fixture-mode onboarding documentation. (The README covers fixture mode; a walkthrough for non-developers is still open.)
 - [ ] Stale endpoint monitoring following workflow discovery.
 - [ ] Defender/Intune correlation, subject to access and operational validation.
 - [ ] Incident-response assistance after procedure discovery.

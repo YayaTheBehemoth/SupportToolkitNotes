@@ -1,13 +1,13 @@
 # BackupAggregator
 
-**Status:** Backup inventory and exception reporting implemented. Monitoring-scope integration is fixture-only on an unmerged feature branch (2026-10-15).
+**Status (2026-10-22):** Backup inventory and exception reporting implemented and released (`v0.2.4`). Monitoring-scope work lives on the unmerged `feature/business-central-monitoring-scope` branch: fixture behavior is tested, and a read-only Business Central provider now exists in source, but no validated production read is recorded. See [[#Business Central branch update — October 22, 2026]].
 
 ## Motivation and early discovery
 Replace manual review of numerous Acronis backup PDFs with tenant-grouped exceptions. Early experiments grouped multiple activities per resource and selected the latest relevant outcome. Activity lifecycle state `completed` is not equivalent to success. Pagination, stable identity and timestamps are essential.
 
 An early production probe considered 102 activities across 48 resource groups. This was an **earlier activity-based experiment**, not necessarily the current collection path.
 
-## Current implementation (source README, 2026-10-12)
+## Current implementation (source README, refreshed 2026-10-22)
 - Discover customer tenants; review one or all.
 - Microsoft 365 inventory via Acronis Resource Manager; device inventory via `AllMachines`.
 - Pagination, normalization, deduplication and tenant aggregation.
@@ -22,7 +22,12 @@ Acronis resource objects do not necessarily correspond one-to-one with physical 
 ```cmd
 dotnet run --project src\SupportToolkit -- backup-aggregator
 dotnet run --project src\SupportToolkit -- backup-aggregator inventory-review --all
+dotnet run --project src\SupportToolkit -- backup-aggregator inventory-review "Example Customer"
+dotnet run --project src\SupportToolkit -- backup-aggregator ticket preview
+dotnet run --project src\SupportToolkit -- backup-aggregator ticket submit
 ```
+
+The bare `backup-aggregator` form is a fixture-mode shortcut; in production mode it prints usage and exits with code 1. Exit codes: 0 complete, 1 invalid command or execution error, 2 one or more tenant reviews incomplete. `ticket submit` is a real external write with no extra confirmation prompt on the raw CLI.
 
 ## Unresolved discrepancy
 One historical tool result reported 49 healthy resources while a portal view reported 44. Root cause **not established**. Check filters, inventory scope, resource types, pagination, deduplication and time semantics.
@@ -248,3 +253,26 @@ Published Windows prerelease `v0.2.4` includes commit `fc56e15` (`fix(backup-agg
 **Validation boundary:** Regression tests cover independent SITE protection and representative workload counts. The rule is grounded in observed production discrepancies but does not establish that every Acronis resource shape or tenant configuration has been tested. This is a normalization and accounting correction, not a new endpoint or a company Zendesk end-to-end validation.
 
 Related: [[Strategy Checkpoint - 2026-10-20]].
+
+
+## Business Central branch update — October 22, 2026
+
+**Source:** `feature/business-central-monitoring-scope` at `6513b79` (October 21). Unmerged and unreleased. Source-confirmed by reading the branch; no test result or production run is claimed here.
+
+What the branch contains beyond the October 15 fixture work:
+
+- A read-only Business Central provider using a delegated, interactive public-client sign-in. No stored secret is held for it.
+- Security-relevant values pinned in code, not configuration: API host, authority host, delegated scope, and a fixed request language. A tampered configuration file therefore cannot redirect a bearer token to another host. Tenant-specific authority only; multi-tenant `common` and `organizations` authorities are never used.
+- A read-only HTTP handler, an OData paginator with completeness guards, subscription DTOs, a mapper and aggregate-only diagnostics.
+- A Business Central connection that a profile can select, with wizard and `configure status` support.
+- `dev bc-subscriptions --production`: explicit opt-in diagnostic that prints **aggregate counts only**, never row-level values, so output can be shared for review.
+- `backup-aggregator scoped-review`: opt-in review limited to tenants the monitoring scope selects. It does not replace `inventory-review` and cannot create tickets.
+- Fixture commands `dev monitoring-scope` and `dev scoped-backup-review`, which make no external request.
+
+**Fail-closed production behavior:** in production mode `scoped-review` checks configuration and the identity source before any sign-in or API request. The default identity source is an explicit "unavailable" implementation, so a production scoped run currently stops before any external activity. This matches the standing guardrail: no commercial filtering of real customers until access, entitlement rules and identity mapping are validated.
+
+**Still unverified:** approved production read access, the exact entitlement semantics (status, dates, duplicate service lines), stable Business Central to Acronis customer identity, and agreed behavior for missing or ambiguous scope. The delegated scope in code is marked in source as needing confirmation against the tenant's app registration before production use.
+
+The existing unscoped inventory review and ticketing are unchanged on this branch.
+
+Related: [[Documentation Checkpoint - 2026-10-22]], [[Architecture and Decisions]].

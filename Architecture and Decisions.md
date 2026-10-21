@@ -33,6 +33,9 @@ Providers own external API details; modules own operational workflows; Core owns
 | Destination-aware idempotency | Distinguish retry identity across instances/groups | Implemented |
 | Explicit existing-connection selection in wizard | Prevent accidental credential duplication | Implemented |
 | Independent compliance aggregation | Avoid mandatory Lighthouse dependency | Investigating |
+| Retire the global `AllowWrites` switch | Duplicated the real write gates (explicit submit, resolved destination, interactive confirmation) and could give false assurance | Implemented (`v0.2.3`) |
+| Pin Business Central API/authority hosts and scope in code | A tampered configuration file must not redirect a bearer token | On unmerged branch |
+| Scoped review is separate and opt-in | Default review and ticketing must not depend on unvalidated entitlement logic | On unmerged branch |
 
 ## Zendesk destination architecture — 2026-10-13
 
@@ -107,3 +110,8 @@ Related: [[Development Journal - 2026-10-15]], [[Modules/BackupAggregator]].
 ## October 20 — Deployment architecture intentionally deferred
 
 The approval POC discussion expanded from one reviewable ticket draft into hypothetical decisions about scheduling, multi-user deployment, storage and replacing the CLI. This is premature given differing module requirements. **Decision:** keep a small synthetic approval experiment, preserve the current modular CLI and security boundaries, and defer a common hosting/interface architecture until concrete operational requirements justify it. See [[Strategy Checkpoint - 2026-10-20]].
+
+
+## October 22 — Documentation reflects released behavior, branches stay labelled
+
+The README, example configuration and Notes were refreshed against `main` at `83a7bf1` and the two feature branches. Reasons and findings are in [[Documentation Checkpoint - 2026-10-22]]. Guardrail: README text may describe released behavior; branch-only work appears only under a development branches section with its evidence boundary stated, so fixture output cannot be read as production validation.
