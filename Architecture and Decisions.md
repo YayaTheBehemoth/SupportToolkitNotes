@@ -33,6 +33,9 @@ Providers own external API details; modules own operational workflows; Core owns
 | Destination-aware idempotency | Distinguish retry identity across instances/groups | Implemented |
 | Explicit existing-connection selection in wizard | Prevent accidental credential duplication | Implemented |
 | Independent compliance aggregation | Avoid mandatory Lighthouse dependency | Investigating |
+| Retire the global `AllowWrites` switch | Duplicated the real write gates (explicit submit, resolved destination, interactive confirmation) and could give false assurance | Implemented (`v0.2.3`) |
+| Pin Business Central API/authority hosts and scope in code | A tampered configuration file must not redirect a bearer token | On unmerged branch |
+| Scoped review is separate and opt-in | Default review and ticketing must not depend on unvalidated entitlement logic | On unmerged branch |
 
 ## Zendesk destination architecture — 2026-10-13
 
@@ -75,3 +78,40 @@ Idempotency is bounded retry protection, not permanent deduplication. Direct CLI
 See [source README](https://github.com/YayaTheBehemoth/SupportToolkit/blob/main/README.md).
 
 Related: [[Ticketing and Configuration]], [[Roadmap]].
+
+## Data authority and workflow separation — 2026-10-14
+
+**Decision:** Monitoring entitlement must be independent of backup resource inventory and scheduled-report delivery configuration. Commercial records determine eligibility; backup data determines resource state; operational reporting decides presentation and follow-up. Exact entitlement rules remain to be discovered.
+
+**As of October 14:** a fixture-backed monitoring-scope provider was proposed. On October 15, a disconnected fixture evaluator, tenant selector and scoped inventory execution path were implemented on an unmerged feature branch. An authorized production Business Central provider remains unimplemented.
+
+**Cross-system identity:** no shared identifier is confirmed. Investigate existing references and integrations before adopting name matching or maintaining a manual registry. Unmatched identities are explicit exceptions, not silently excluded records.
+
+**Compliance boundary:** synthetic Graph-backed exception lists, setting evidence, diagnostics and investigation reports are a development milestone, not proof of production Graph authorization or completeness. Preserve separation between collection, interpretation and case lifecycle action.
+
+Related: [[Modules/BackupAggregator]], [[Modules/Compliance Monitor]], [[Development Journal - 2026-10-14]].
+
+## Monitoring-scope boundaries — 2026-10-15
+
+The implemented **fixture-only** pipeline is:
+`subscription evidence → conservative entitlement assessment → independently resolved customer identity → Acronis tenant selection → inventory review`.
+
+- Entitlement and backup resource health are distinct. Scope selection precedes resource collection rather than hiding completed report rows.
+- Absence, ambiguity or conflicting evidence cannot silently establish non-entitlement. The selector preserves unresolved tenants and unmatched commercial observations.
+- `Inventory complete`, `scope complete` and `overall complete` are separate assertions. Successful selected inventory does not mean all monitoring responsibility has been resolved.
+- Identity links in fixtures are fictional. There is no validated automatic BC-to-Acronis reconciliation or permanent production mapping registry.
+- The scoped service method reuses existing inventory concurrency and failure handling. The normal all-tenant production workflow and ticketing were not changed.
+- A read-only BC transport guard exists, but approved production endpoints, authentication/consent and exact API payloads remain unknown. No production BC access has been demonstrated.
+
+Design guardrail: do not wire commercial filtering or external ticket side effects to these fixture results until authoritative access, entitlement rules, identity completeness and unresolved-case behavior are validated.
+
+Related: [[Development Journal - 2026-10-15]], [[Modules/BackupAggregator]].
+
+## October 20 — Deployment architecture intentionally deferred
+
+The approval POC discussion expanded from one reviewable ticket draft into hypothetical decisions about scheduling, multi-user deployment, storage and replacing the CLI. This is premature given differing module requirements. **Decision:** keep a small synthetic approval experiment, preserve the current modular CLI and security boundaries, and defer a common hosting/interface architecture until concrete operational requirements justify it. See [[Strategy Checkpoint - 2026-10-20]].
+
+
+## October 22 — Documentation reflects released behavior, branches stay labelled
+
+The README, example configuration and Notes were refreshed against `main` at `83a7bf1` and the two feature branches. Reasons and findings are in [[Documentation Checkpoint - 2026-10-22]]. Guardrail: README text may describe released behavior; branch-only work appears only under a development branches section with its evidence boundary stated, so fixture output cannot be read as production validation.
