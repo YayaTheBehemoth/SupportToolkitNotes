@@ -27,11 +27,17 @@ Consequence for this use case: a former customer's tickets will typically be a *
 - OAuth scope `tickets:write` includes permanent deletion; `tickets:read` is the only separate ticket scope.
 - PKCE is supported for public clients (S256, no secret); http redirects are allowed only for `localhost`/`127.0.0.1`.
 
+## Confirmed in a personal trial — 2026-11-02
+
+- Sign-in with PKCE and a **public** OAuth client works; no client secret is involved. A Zendesk admin must still register the client (client kind, redirect URL, allowed scopes).
+- **The redirect port is ignored:** with `http://localhost` registered, a redirect to `http://localhost:53124` was accepted. The app can use any free loopback port.
+- **Scopes:** with `tickets:read tickets:write`, both `GET /api/v2/users/me` and `GET /api/v2/search` returned 403. With **`read tickets:write`** both succeeded. Search needs the general `read` scope (consistent with Zendesk community reports). `read` is broad, but the token acts as the signed-in user and is bounded by that user's own permissions.
+- The trial user was an admin. Behaviour for an agent role is not yet observed.
+
 ## Unverified
 
 - What the Zendesk audit log records for a (soft) API deletion, and under which user.
 - That the API restore path works for tickets deleted through `destroy_many` (documented, not tested; the trial has no archived tickets).
-- Whether a localhost redirect accepts any port.
 - Which agent roles may delete tickets in the target instance (a Zendesk setting).
 
 ## Decisions — November 2, 2026
@@ -40,7 +46,7 @@ Consequence for this use case: a former customer's tickets will typically be a *
 |---|---|
 | Lives in SupportToolkit as its own module, owned by the project author. | Built on own initiative; the requester supplies the problem, not a mandate or hours. |
 | Interactive only; never scheduled or unattended. | Bulk deletion of customer data must always have a person reviewing it. The signed-in operator is accountable for each run. |
-| Per-user OAuth with PKCE; the acting person is the identity. | Each operator's own Zendesk permissions apply. The existing ticket-creation credential is not widened. |
+| Per-user OAuth with PKCE; the acting person is the identity. Public client, redirect `http://localhost` (any port), scopes `read tickets:write`. | Each operator's own Zendesk permissions apply. The existing ticket-creation credential is not widened. Scopes and redirect confirmed in the trial. |
 | Deletion sits behind its own narrow interface, separate from ticket creation. | Keeps the destructive capability isolated and reviewable. |
 | Flow: search → review → select → confirm → delete → back to search. | Requested flow. Nothing is deleted without an explicit selection and confirmation. |
 | Two-step confirmation: count first; a second, explicit confirmation listing any non-closed tickets. | Requested. For a former customer, a non-closed ticket is an anomaly. |

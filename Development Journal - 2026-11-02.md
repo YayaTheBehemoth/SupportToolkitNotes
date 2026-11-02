@@ -36,7 +36,6 @@ Decision log for the Zendesk bulk deletion scoping and the related architecture 
 - Which user the existing ticket-creation OAuth client acts as, and whether that role can delete.
 - Whether all intended operators have delete permission.
 - What the Zendesk audit log records for an API deletion, and under whom.
-- Whether the localhost redirect accepts any port.
 
 Related: [[Development Timeline]], [[Roadmap]].
 
@@ -48,3 +47,9 @@ Two open points were answered from Zendesk's official documentation:
 - Deleted archived tickets skip the Deleted tickets view and cannot be restored from the agent interface, but can be restored through the API by ID within the 30-day window. The earlier third-party claim that they become permanent at once was wrong.
 
 Consequence: decision 7 is no longer pending. The deletion receipt with ticket IDs is required, because it is the recovery path for archived tickets.
+
+## Trial sign-in test (afternoon)
+
+- PKCE sign-in with a public client works. The redirect port is ignored, so the app can pick any free port and the client only needs `http://localhost`.
+- Search and `users/me` need the general `read` scope; `tickets:read` is not enough. **Decision:** request `read tickets:write`. The token acts as the operator and cannot exceed the operator's own Zendesk permissions.
+- Tested as an admin only; an agent-role run is still useful before production.
