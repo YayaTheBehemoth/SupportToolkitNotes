@@ -20,16 +20,17 @@ Consequence for this use case: a former customer's tickets will typically be a *
 
 ## Verified API facts (official Zendesk documentation)
 
-- `DELETE /api/v2/tickets/destroy_many`: at most 100 IDs per request.
+- `DELETE /api/v2/tickets/destroy_many`: at most 100 IDs per request, tickets closed for 24 hours or more, standard limit of 400 requests per minute (English article confirmed 2026-11-02). ([How can I bulk delete closed tickets?](https://support.zendesk.com/hc/en-us/articles/4408830952474))
+- Deleting a ticket moves it to the Deleted tickets view for 30 days, after which it is permanently deleted. **An archived ticket that is deleted does not appear in the Deleted tickets view and cannot be restored from the agent interface, but it can still be restored through the API by ticket ID during the 30-day window.** ([Viewing and recovering deleted tickets](https://support.zendesk.com/hc/en-us/articles/4408835089050), [Deleting tickets](https://support.zendesk.com/hc/en-us/articles/4408883872538))
+- The audit log records manual permanent deletions; automatic permanent deletion after 30 days is not tracked there. Deletion events can be reported in Explore (Updates history, Activity > Deletions). After permanent deletion the ticket ID remains as a record with content scrubbed.
 - Search API: at most 1,000 results per query, 100 per page, offset pagination that can return duplicates. `count` reports the true total. The export endpoint is cursor-based and returns archived tickets.
 - OAuth scope `tickets:write` includes permanent deletion; `tickets:read` is the only separate ticket scope.
 - PKCE is supported for public clients (S256, no secret); http redirects are allowed only for `localhost`/`127.0.0.1`.
 
 ## Unverified
 
-- Whether API deletion of an archived ticket is permanent (no recovery window). Only third-party sources so far.
-- What the Zendesk audit log records for API deletions, and under which user.
-- The exact wording of the 24-hour minimum age for closed-ticket bulk deletion in the English documentation.
+- What the Zendesk audit log records for a (soft) API deletion, and under which user.
+- That the API restore path works for tickets deleted through `destroy_many` (documented, not tested; the trial has no archived tickets).
 - Whether a localhost redirect accepts any port.
 - Which agent roles may delete tickets in the target instance (a Zendesk setting).
 
@@ -48,7 +49,7 @@ Consequence for this use case: a former customer's tickets will typically be a *
 | Delete only the exact confirmed ID list; never re-run the search at delete time. | What was reviewed is what is deleted. |
 | Preview shows breakdowns by organization and requester domain. | Email-domain and free-text keys can catch other customers' tickets; strays must surface as exceptions. |
 | The tool does not check the retention policy itself. | It cannot know the relationship end date; the operator confirms it. |
-| A deletion receipt per run (search, operator, time, counts, ticket IDs; no ticket content) — **pending** the audit-log check. | Gives the operator evidence afterwards if Zendesk's own audit log does not. |
+| A deletion receipt per run (search, operator, time, counts, ticket IDs; no ticket content). **Decided 2026-11-02.** | Archived tickets can only be restored through the API by ID within 30 days, so the receipt's ID list is the recovery path. It also gives the operator evidence afterwards. |
 | GUI: a separate WPF project referencing the existing project, containing only this module. Workflow stays UI-independent with a CLI path for development. | A GUI is required for this module. One module's need does not justify a platform-wide UI. See [[Architecture and Decisions]]. |
 
 ## Testing plan

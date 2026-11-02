@@ -18,7 +18,7 @@ Decision log for the Zendesk bulk deletion scoping and the related architecture 
 4. **Per-user PKCE sign-in** and a narrow deletion interface, separate from ticket creation. The existing ticket-creation credential is not widened.
 5. **Confirmation:** count confirmation, plus a second explicit confirmation listing non-closed tickets, which are unselected by default.
 6. **Safety rules:** truncated searches are never shown as complete; only the exact confirmed ID list is deleted; the search is not re-run at delete time; the preview breaks results down by organization and requester domain.
-7. **Deletion receipt** per run (search, operator, time, counts, IDs; no content): pending the audit-log check in the trial.
+7. **Deletion receipt** per run (search, operator, time, counts, IDs; no content): pending the audit-log check in the trial. *(Made required later the same day; see the update below.)*
 8. **Testing agreed with the stakeholder:** fake-handler tests, a personal trial with synthetic tickets, then a supervised production run on tickets approved for deletion. That set should contain both archived and recently closed tickets. No sandbox exists.
 9. **GUI:** required for this module. A separate WPF project references the existing project and hosts only this module. No platform-wide UI; the library/host split is deferred, not rejected. Converting the existing executable to WPF was rejected because it would break the CLI.
 10. **Deployment:** unchanged portable release; the release script gets a second publish target.
@@ -37,7 +37,14 @@ Decision log for the Zendesk bulk deletion scoping and the related architecture 
 - Whether all intended operators have delete permission.
 - What the Zendesk audit log records for an API deletion, and under whom.
 - Whether the localhost redirect accepts any port.
-- English wording of the 24-hour minimum for closed-ticket bulk deletion.
-- Whether API deletion of archived tickets is permanent.
 
 Related: [[Development Timeline]], [[Roadmap]].
+
+## Update later the same day
+
+Two open points were answered from Zendesk's official documentation:
+
+- The English article confirms: at most 100 tickets per request, closed for 24 hours or more, 400 requests per minute.
+- Deleted archived tickets skip the Deleted tickets view and cannot be restored from the agent interface, but can be restored through the API by ID within the 30-day window. The earlier third-party claim that they become permanent at once was wrong.
+
+Consequence: decision 7 is no longer pending. The deletion receipt with ticket IDs is required, because it is the recovery path for archived tickets.
