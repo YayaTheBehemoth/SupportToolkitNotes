@@ -6,7 +6,7 @@ Notes on architecture, modules, API discovery, development history and roadmap.
 
 ## Latest decisions
 
-Start with [[Strategy Checkpoint - 2026-10-20]] for current priorities, evidence boundaries and the decision to defer universal deployment architecture. For what the documentation now reflects, and what was corrected, see [[Documentation Checkpoint - 2026-10-22]]. Older notes may describe historical states.
+Start with [[Documentation Checkpoint - 2026-11-02]] for the current state (`v0.3.0`), the November 2 decisions (Zendesk bulk deletion, a GUI for that module only, BackupHealth retirement) and what was corrected. [[Strategy Checkpoint - 2026-10-20]] still holds the priorities and the decision to defer a universal deployment architecture. Older notes may describe historical states.
 
 ## Where things are
 
@@ -16,7 +16,8 @@ Start with [[Strategy Checkpoint - 2026-10-20]] for current priorities, evidence
 | Design decisions and reasons | [[Architecture and Decisions]] |
 | Zendesk routing and configuration | [[Ticketing and Configuration]] |
 | Backup inventory review | [[Modules/BackupAggregator]] |
-| Backup health evaluation | [[Modules/BackupHealth]] |
+| Backup health evaluation (retiring) | [[Modules/BackupHealth]] |
+| Zendesk bulk ticket deletion (designed, not built) | [[Modules/Zendesk Bulk Delete]] |
 | Compliance investigation (synthetic) | [[Modules/Compliance Monitor]] |
 | Endpoint triage ideas | [[Modules/Endpoint Triage Ideas]] |
 | Backlog | [[Roadmap]] |

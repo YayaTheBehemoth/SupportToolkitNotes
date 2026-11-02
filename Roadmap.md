@@ -4,19 +4,30 @@ Working backlog, not commitments.
 
 Implementation status is grounded in the SupportToolkit source repository and tests. Discovery and architectural findings are tracked in these notes.
 
+## Added November 2, 2026
+
+- [ ] Remove BackupHealth as a separate change: keep the Acronis resource-status provider and keep older configuration files loadable. See [[Modules/BackupHealth]].
+- [ ] Zendesk bulk deletion: user checks before building (which user the existing OAuth client acts as and whether it can delete; whether agents may delete; audit-log entry for an API deletion in the trial; localhost redirect port; English wording of the 24-hour rule). See [[Modules/Zendesk Bulk Delete]].
+- [ ] Zendesk bulk deletion: UI-independent workflow with fake-handler tests and a CLI path.
+- [ ] Zendesk bulk deletion: WPF project for that module only, plus a second publish target in the release script.
+- [ ] Zendesk bulk deletion: trial test, then one supervised production run on approved tickets that include both archived and recently closed tickets.
+- [ ] Record a fresh `dotnet test` result for `v0.3.0`.
+- [ ] Correct the source README introduction, which still says `Current release: v0.2.4` and lists BackupHealth as current (code-owner action).
+- [ ] Review `feature/scope-visibility-wait-usage-probe` for merge, including the read-only allowlist addition.
+
 ## Priorities revised October 20, 2026
 
 - [ ] Finish synthetic, multi-tenant, exception-first Compliance reporting with explicit collection failures.
 - [ ] Seek authorized organizational Zendesk end-to-end validation; do not assume a personal test proves organizational behavior.
-- [ ] Confirm read-only BC subscription exposure and stable customer identity independently of feature development.
+- [x] Confirm read-only BC subscription exposure and stable customer identity independently of feature development. (Released in `v0.3.0` with automatic name matching instead of a stable shared identifier; README states live read-only exercise.)
 - [ ] Test synthetic Power Automate approval/rejection **as a proof of concept**; production deployment and scheduling are not prerequisites.
 - [ ] Create a sanitized BackupAggregator process-engineering case study (before/after, technical decisions, measured evidence where available).
 - [ ] Maintain one Obsidian/GitHub Notes source of truth; avoid manually duplicated Copilot documents.
 - [x] Refresh the source README, example configuration and Notes to match `v0.2.4` and the feature branches (October 22). See [[Documentation Checkpoint - 2026-10-22]].
 - [ ] Keep the CLI command catalogue (Claude project space) in step with command changes.
-- [ ] Record a fresh `dotnet test` result for `v0.2.4`; the `251` figure belongs to `v0.2.3`.
+- [ ] ~~Record a fresh `dotnet test` result for `v0.2.4`~~ Superseded by the `v0.3.0` item above; the `251` figure belongs to `v0.2.3`.
 
-**Deferred:** No universal deployment, hosting, operator UI or persistence architecture until concrete module needs and approved operating environments are understood. Older items below are historical backlog entries and may be stale. See [[Strategy Checkpoint - 2026-10-20]].
+**Deferred:** No universal deployment, hosting, operator UI or persistence architecture until concrete module needs and approved operating environments are understood. (November 2: one module-specific GUI decided, for Zendesk bulk deletion. This does not change the platform-level deferral.) Older items below are historical backlog entries and may be stale. See [[Strategy Checkpoint - 2026-10-20]].
 
 ## Earlier backlog
 
@@ -88,6 +99,8 @@ Related: [[Ticketing and Configuration]], [[Architecture and Decisions]], [[Comp
 - [ ] Define operational policy for missing and conflicting monitoring scope.
 - [ ] Integrate production BC acquisition and monitored-only execution **only after** identity and policy validation and explicit authorization.
 
-**Branch:** `feature/business-central-monitoring-scope` remains unmerged; existing production review/ticketing behavior is unchanged.
+**Branch (as of October 15):** `feature/business-central-monitoring-scope` remained unmerged at the time.
+
+**Update November 2:** merged and released in `v0.3.0` (October 27). Production acquisition, conservative automatic name matching and the scoped review are now on `main`. Still open from the list above: full entitlement semantics across contract transitions, a stable external reference instead of name matching, and a source for which tenants are actually monitored. See [[Modules/BackupAggregator]].
 
 Related: [[Development Journal - 2026-10-15]], [[Modules/BackupAggregator]].

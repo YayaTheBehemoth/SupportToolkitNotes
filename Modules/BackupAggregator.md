@@ -1,6 +1,6 @@
 # BackupAggregator
 
-**Status (2026-10-22):** Backup inventory and exception reporting implemented and released (`v0.2.4`). Monitoring-scope work lives on the unmerged `feature/business-central-monitoring-scope` branch: fixture behavior is tested, and a read-only Business Central provider now exists in source, but no validated production read is recorded. See [[#Business Central branch update — October 22, 2026]].
+**Status (2026-11-02):** Released in `v0.3.0` (October 27) with Business Central monitoring scope: the scoped review is now on `main` and is the only review the interactive console offers. Further work (in-progress wait, stray-tenant check, usage probes) is on the unmerged `feature/scope-visibility-wait-usage-probe` branch. See [[#Release v0.3.0 — monitoring scope on main]] and [[#Branch: scope visibility, in-progress wait and usage probes]]. Sections below dated before October 27 describe earlier states.
 
 ## Motivation and early discovery
 Replace manual review of numerous Acronis backup PDFs with tenant-grouped exceptions. Early experiments grouped multiple activities per resource and selected the latest relevant outcome. Activity lifecycle state `completed` is not equivalent to success. Pagination, stable identity and timestamps are essential.
@@ -276,3 +276,32 @@ What the branch contains beyond the October 15 fixture work:
 The existing unscoped inventory review and ticketing are unchanged on this branch.
 
 Related: [[Documentation Checkpoint - 2026-10-22]], [[Architecture and Decisions]].
+
+## Release v0.3.0 — monitoring scope on main
+
+**Source:** tag `v0.3.0` at `06f9327` (October 27), source README. Source-confirmed by reading; no test run is recorded here.
+
+The `feature/business-central-monitoring-scope` branch was merged and released. Compared with the [[#Business Central branch update — October 22, 2026]]:
+
+- **Production scoped review no longer fails closed for lack of an identity source.** Customers are matched to Acronis tenants automatically on every run, by name, with nothing stored. Matching normalizes case, accents, punctuation and spacing, tolerates one typo in long names and short word endings, requires numbers to match exactly, and accepts exact, near-exact and containment matches only when unique. Weak overlaps, ambiguity and key conflicts are never accepted.
+- **Entitlement rule:** an Active, unblocked subscription with a line for a configured entitling item. The add-on item alone is enough. An item only on Suspended subscriptions does not entitle. Customers holding a configured service item (the backup itself) are also matched, so "has backup, not monitoring" is decided as not entitled instead of unresolved.
+- **Operator tenant** is always included. Acronis does not allow reviewing the partner-kind tenant, so the matching customer-kind tenant is reviewed.
+- **Scope report** splits Acronis customer tenants into in scope, excluded, needs scope review and unscoped, with counts that add up, followed by discrepancies, exceptions and the automatic mapping result. Discrepancies are computed, never ticketed.
+- **Scoped tickets** (`ticket preview --scoped`, `ticket submit --scoped`) are produced only when the whole scoped review is complete.
+- The report is deliberately stateless: every discrepancy is reported on every run; accepted or known exceptions are not tracked. An "acknowledged exceptions" mechanism was added and removed again before release.
+- There is still no source for which tenants are actually monitored, so "monitored without entitlement" cannot be detected, and the report says so.
+- Diagnostics: `dev customer-matching --production [--names] [--why]` (read-only dry run of the matching) and fixture walkthroughs `dev monitoring-scope` and `dev customer-mapping`.
+
+**Validation boundary:** the source README states that Business Central reads and the matching were exercised read-only against a live environment and that the scoped review has had limited end-to-end validation. No detailed observation is recorded in Notes.
+
+## Branch: scope visibility, in-progress wait and usage probes
+
+**Source:** `feature/scope-visibility-wait-usage-probe` at `2fea460` (October 29–30). Unmerged and unreleased; source-confirmed by reading the branch README diff and file list.
+
+- **In-progress wait:** in production, a review waits for resources Acronis reports as running and re-reviews only the affected tenants, up to a configurable maximum (defaults 1800 s, poll 30 s; `0` disables). Resources still running at the end stay In progress and are counted as pending, never healthy. Single-tenant review does not wait.
+- **Scoped ticket gate relaxed for unmatched tenants only:** unmatched tenants no longer block a scoped ticket. The ticket then carries an `INCOMPLETE SCOPE` banner and subject prefix and lists them. All other open scope issues still block.
+- **Stray-tenant check** in the ticket and console: Acronis tenants matched to a customer that holds neither the backup nor the monitoring item are listed as candidates for unbilled use. Informational only; it reports "unavailable" rather than "none" when service items are not configured.
+- **`dev acronis-usage --production`:** per-tenant usage read. Aggregate output by default; `--names` prints rows with customer names; `--out` writes a CSV only to a new file outside any git working tree. Missing usage is an explicit `unknown` row, never zero. Uses one additional endpoint added to the read-only allowlist as an exact path.
+- **`dev usage-compare --production`:** read-only comparison of Business Central backup quantities with Acronis usage per customer.
+
+Open question for merge review: the usage endpoint widens the read-only allowlist, and the vendor describes the figures as not meant for billing. The comparison is evidence for an operator, not a billing control.

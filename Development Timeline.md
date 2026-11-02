@@ -74,6 +74,14 @@ Related: [[Modules/BackupAggregator]], [[Strategy Checkpoint - 2026-10-20]].
 - October 21 (evening): Business Central branch commit `6513b79` added a read-only Business Central provider with delegated sign-in, a `dev bc-subscriptions --production` diagnostic and an opt-in `backup-aggregator scoped-review`. No validated production read is recorded.
 - October 22: documentation refresh of the README, example configuration and these notes. See [[Documentation Checkpoint - 2026-10-22]].
 
+## October 26 – November 2, 2026
+
+- October 26: explicit Zendesk ticket submitter and requester required per connection (`65f158e` on `main`), merged into both feature branches.
+- October 26–27: monitoring-scope branch gained multi-item entitlement, operator tenant exclusion, automatic name-based customer-to-tenant matching and a full scope report. An acknowledged-exceptions mechanism was added and removed again.
+- October 27: **`v0.3.0` released** with Business Central monitoring scope on `main`.
+- October 29–30: new branch `feature/scope-visibility-wait-usage-probe` (in-progress wait, stray-tenant check, Acronis usage probe, usage comparison). Unmerged.
+- October 31 – November 2: Zendesk bulk ticket deletion scoped with the internal stakeholder; design decisions recorded in [[Development Journal - 2026-11-02]], nothing built. A GUI was decided for that module only (WPF), and BackupHealth was marked for retirement. See [[Documentation Checkpoint - 2026-11-02]].
+
 ## Release dates
 
 | Version | Date |
@@ -84,3 +92,4 @@ Related: [[Modules/BackupAggregator]], [[Strategy Checkpoint - 2026-10-20]].
 | `v0.2.2` | 2026-10-13 |
 | `v0.2.3` | 2026-10-17 (tag date is that of commit `5705aa5`; release published October 18–19 per the October 20 checkpoint) |
 | `v0.2.4` | 2026-10-19 |
+| `v0.3.0` | 2026-10-27 |

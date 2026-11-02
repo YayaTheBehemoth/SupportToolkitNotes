@@ -1,15 +1,16 @@
 # Architecture and Decisions
 
-## Current architecture
+## Current architecture (`main` at `v0.3.0`)
 
 ~~~text
 src/SupportToolkit/
   Program.cs
   Cli/Commands/
   Ui/Interactive/
-  Core/{Configuration,Secrets,Ticketing,Logging,ErrorHandling,Modules}/
-  Modules/{BackupAggregator,BackupHealth}/
-  Providers/{Acronis,Zendesk}/
+  Core/{Configuration,CustomerMapping,ErrorHandling,Logging,Modules,
+       MonitoringScope,Reconciliation,Secrets,Ticketing}/
+  Modules/{BackupAggregator,BackupHealth}/      # BackupHealth: retirement decided 2026-11-02
+  Providers/{Acronis,BusinessCentral,Zendesk}/
 tests/SupportToolkit.Tests/
 ~~~
 
@@ -34,8 +35,13 @@ Providers own external API details; modules own operational workflows; Core owns
 | Explicit existing-connection selection in wizard | Prevent accidental credential duplication | Implemented |
 | Independent compliance aggregation | Avoid mandatory Lighthouse dependency | Investigating |
 | Retire the global `AllowWrites` switch | Duplicated the real write gates (explicit submit, resolved destination, interactive confirmation) and could give false assurance | Implemented (`v0.2.3`) |
-| Pin Business Central API/authority hosts and scope in code | A tampered configuration file must not redirect a bearer token | On unmerged branch |
-| Scoped review is separate and opt-in | Default review and ticketing must not depend on unvalidated entitlement logic | On unmerged branch |
+| Pin Business Central API/authority hosts and scope in code | A tampered configuration file must not redirect a bearer token | Implemented (`v0.3.0`) |
+| Scoped review is separate and opt-in | Default review and ticketing must not depend on unvalidated entitlement logic | Superseded in `v0.3.0`: the interactive console offers only the scoped review; the all-tenant review remains a command |
+| Automatic name-based customer-to-tenant matching, nothing stored | No shared identifier exists; unique strong matches only, ambiguous and conflicting cases stay visible | Implemented (`v0.3.0`); supersedes the October 14 guidance below |
+| Explicit Zendesk submitter and requester per connection | With client credentials, tickets would otherwise be attributed to the user who created the OAuth client | Implemented (`v0.3.0`) |
+| Retire BackupHealth | BackupAggregator covers the needed visibility | Decided 2026-11-02; code not yet removed |
+| GUI for the Zendesk deletion module only (separate WPF project) | One concrete workflow requires a GUI; no platform-wide UI | Decided 2026-11-02; not built |
+| Zendesk deletion uses per-user PKCE, its own narrow interface | The acting operator is the identity; the ticket-creation credential is not widened | Decided 2026-11-02; not built |
 
 ## Zendesk destination architecture — 2026-10-13
 
@@ -87,6 +93,8 @@ Related: [[Ticketing and Configuration]], [[Roadmap]].
 
 **Cross-system identity:** no shared identifier is confirmed. Investigate existing references and integrations before adopting name matching or maintaining a manual registry. Unmatched identities are explicit exceptions, not silently excluded records.
 
+*Superseded October 27 (`v0.3.0`):* conservative automatic name matching was adopted. The principle that unmatched identities stay explicit exceptions still holds. See [[Documentation Checkpoint - 2026-11-02]].
+
 **Compliance boundary:** synthetic Graph-backed exception lists, setting evidence, diagnostics and investigation reports are a development milestone, not proof of production Graph authorization or completeness. Preserve separation between collection, interpretation and case lifecycle action.
 
 Related: [[Modules/BackupAggregator]], [[Modules/Compliance Monitor]], [[Development Journal - 2026-10-14]].
@@ -115,3 +123,15 @@ The approval POC discussion expanded from one reviewable ticket draft into hypot
 ## October 22 — Documentation reflects released behavior, branches stay labelled
 
 The README, example configuration and Notes were refreshed against `main` at `83a7bf1` and the two feature branches. Reasons and findings are in [[Documentation Checkpoint - 2026-10-22]]. Guardrail: README text may describe released behavior; branch-only work appears only under a development branches section with its evidence boundary stated, so fixture output cannot be read as production validation.
+
+## November 2 — A GUI for one module, not a UI platform
+
+The Zendesk deletion module needs a GUI. The interactive shell is already a presentation layer over module workflows, so a GUI is a second presentation layer, not a new architecture.
+
+**Decision:** add a separate WPF project that references the existing project (as the test project already does) and hosts only the deletion module. The deletion workflow contains no UI code and keeps a CLI path for development and testing. The existing CLI and the portable release stay as they are; the release script gains a second publish target.
+
+**Not done now:** splitting the code into a class library with separate console and GUI hosts. That pattern enforces that presentation cannot leak into modules, but it is not needed to add one GUI. Revisit it if presentation code starts leaking into modules or a second module needs the GUI. Converting the existing executable to WPF was rejected because a Windows GUI executable has no console, which would break the CLI.
+
+**Also decided:** retire BackupHealth as a separate change before the deletion module. Keep the Acronis resource-status provider (BackupAggregator uses it) and keep older configuration files loadable.
+
+See [[Modules/Zendesk Bulk Delete]] and [[Documentation Checkpoint - 2026-11-02]].

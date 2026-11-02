@@ -2,6 +2,8 @@
 
 **Status:** Design decisions and roadmap guidance; not authorization to change the SupportToolkit code repository.
 
+*Later state:* the engineering snapshot below is historical. `v0.3.0` (October 27) released the Business Central monitoring scope, and on November 2 a GUI was decided for one module only. See [[Documentation Checkpoint - 2026-11-02]]. The deployment deferral itself still stands.
+
 ## Why this checkpoint matters
 
 A Power Automate approval proof of concept began as a narrow, valuable question: can an operator review and approve a generated BackupAggregator ticket draft? Discussion expanded into scheduling, hosted runtimes, nontechnical user interfaces, central storage, deployment and long-running operational infrastructure. This exposed a planning trap: a choice about one workflow became a hypothetical platform-wide deployment decision before the modules' operational requirements were understood.

@@ -1,6 +1,6 @@
 # Ticketing and Configuration
 
-**Status:** Implemented; Zendesk destination routing validated in a personal trial (2026-10-13).
+**Status:** Implemented; Zendesk destination routing validated in a personal trial (2026-10-13). Explicit submitter and requester added in `v0.3.0` (2026-10-27). Organizational end-to-end validation is still pending.
 
 ## Shared ticketing
 
@@ -49,6 +49,8 @@ All instance names, client values and IDs below are fictional. This is a fragmen
       "trial": {
         "subdomain": "example",
         "clientId": "example-client",
+        "submitterId": 900000000001,
+        "requesterId": 900000000001,
         "destinations": {
           "dev": { "groupId": 111111 },
           "operations": { "groupId": 222222 }
@@ -117,6 +119,18 @@ An ambiguous creation outcome must not be followed by uncontrolled repeat submis
 **Not yet established:** organizational Zendesk deployment behavior, organizational triggers/automations/notification effects, durable duplicate prevention, and automated interactive-wizard tests. The operations view alone does not establish the exact submission path of that second ticket.
 
 A Zendesk group routes/assigns tickets; a view filters tickets for operators. Neither is a true sandbox security boundary.
+
+## Ticket submitter and requester — `v0.3.0`
+
+Every Zendesk connection now requires two non-secret settings, `submitterId` and `requesterId` (positive Zendesk user IDs in that instance; they may be the same user). SupportToolkit always sends both and never falls back to the token's identity.
+
+**Reason:** with the client-credentials grant, Zendesk otherwise attributes the ticket to the user the OAuth token acts as, which is the user who created the OAuth client. Attribution should be a configured, visible choice.
+
+If either value is missing or invalid, destination preview and submission fail locally before any Zendesk request, and `configure status` shows why. Connections saved by earlier versions cannot submit until both are added; the wizard asks for them. They are not part of the idempotency key.
+
+## Ticket deletion is a separate capability
+
+Ticket creation (above) uses one shared client-credentials connection. The planned Zendesk bulk deletion uses a different model: the operator signs in personally with PKCE, and deletion sits behind its own interface. The ticket-creation credential and its `tickets:write` scope are not reused or widened for deletion. See [[Modules/Zendesk Bulk Delete]].
 
 ## Local configuration and distribution
 
