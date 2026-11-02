@@ -32,6 +32,8 @@ Consequence for this use case: a former customer's tickets will typically be a *
 - Sign-in with PKCE and a **public** OAuth client works; no client secret is involved. A Zendesk admin must still register the client (client kind, redirect URL, allowed scopes).
 - **The redirect port is ignored:** with `http://localhost` registered, a redirect to `http://localhost:53124` was accepted. The app can use any free loopback port.
 - **Scopes:** with `tickets:read tickets:write`, both `GET /api/v2/users/me` and `GET /api/v2/search` returned 403. With **`read tickets:write`** both succeeded. Search needs the general `read` scope (consistent with Zendesk community reports). `read` is broad, but the token acts as the signed-in user and is bounded by that user's own permissions.
+- **The client's allowed scopes are enforced:** with only `tickets:read tickets:write` allowed on the client, a request for `read tickets:write` was refused with "Invalid scope". The admin's setting is a real ceiling, including for anyone holding a confidential client's secret.
+- Production client spec: public, redirect `http://localhost`, allowed scopes `read` and `tickets:write`, token expiry on, secret unused.
 - The trial user was an admin. Behaviour for an agent role is not yet observed.
 
 ## Unverified
