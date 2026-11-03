@@ -4,6 +4,19 @@ Working backlog, not commitments.
 
 Implementation status is grounded in the SupportToolkit source repository and tests. Discovery and architectural findings are tracked in these notes.
 
+## Updated November 3, 2026 (`v0.4.0`)
+
+- [x] Remove BackupHealth (`v0.4.0`).
+- [x] Zendesk bulk deletion workflow, receipts and web page (`v0.4.0`). Sandbox-validated only.
+- [ ] Organizational end-to-end validation of Zendesk bulk delete, starting with the supervised run on approved tickets (archived and recently closed).
+- [ ] Record in Notes: the Zendesk audit-log entry for an API deletion, and the leftover-secret test result.
+- [ ] Verify `--domain` search (`requester:*@domain`); replace it if Zendesk does not support it.
+- [ ] Run the Backup Aggregator web page in production mode.
+- [ ] Test the hidden-typing secret prompt of `configure import` interactively.
+- [ ] Add `dev acronis-usage` and `dev usage-compare` to the `v0.4.0` README release row; reword the README project-status sentence about the operator interface.
+- [ ] Remove leftover sandbox test organizations and people tagged `st_seed`.
+- [ ] Refresh the CLI command catalogue (Claude project space) for `v0.4.0`.
+
 ## Added November 2, 2026
 
 - [ ] Remove BackupHealth as a separate change: keep the Acronis resource-status provider and keep older configuration files loadable. See [[Modules/BackupHealth]].

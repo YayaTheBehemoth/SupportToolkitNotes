@@ -130,7 +130,7 @@ If either value is missing or invalid, destination preview and submission fail l
 
 ## Ticket deletion is a separate capability
 
-Ticket creation (above) uses one shared client-credentials connection. The planned Zendesk bulk deletion uses a different model: the operator signs in personally with PKCE, and deletion sits behind its own interface. The ticket-creation credential and its `tickets:write` scope are not reused or widened for deletion. See [[Modules/Zendesk Bulk Delete]].
+Ticket creation (above) uses one shared client-credentials connection. Zendesk bulk deletion (implemented in `v0.4.0`, `connections.zendeskDeletion`) uses a different model: the operator signs in personally with PKCE, and deletion sits behind its own interface. The ticket-creation credential and its `tickets:write` scope are not reused or widened for deletion. See [[Modules/Zendesk Bulk Delete]].
 
 ## Local configuration and distribution
 

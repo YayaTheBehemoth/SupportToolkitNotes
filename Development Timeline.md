@@ -82,6 +82,12 @@ Related: [[Modules/BackupAggregator]], [[Strategy Checkpoint - 2026-10-20]].
 - October 29–30: new branch `feature/scope-visibility-wait-usage-probe` (in-progress wait, stray-tenant check, Acronis usage probe, usage comparison). Unmerged.
 - October 31 – November 2: Zendesk bulk ticket deletion scoped with the internal stakeholder; design decisions recorded in [[Development Journal - 2026-11-02]], nothing built. A GUI was decided for that module only (WPF), and BackupHealth was marked for retirement. See [[Documentation Checkpoint - 2026-11-02]].
 
+## November 2–3, 2026
+
+- November 2: bulk delete implemented with PKCE sign-in, selection and receipts, and BackupHealth removed (`53a0d24`); UI-agnostic ticket preparation, `BackupReviewSession` and `LayeringTests` (`9100fd3`); usage-probe branch merged.
+- November 2–3: local web UI (`cded2a1` onward): launch-token security, Backup Aggregator and Zendesk bulk delete pages, Simple / Detailed view; unrecognised settings kept on save; `configure import` and zip launchers.
+- November 3: **`v0.4.0` released**; all feature branches except compliance merged and deleted. The WPF plan from November 2 was replaced by the web UI. See [[Documentation Checkpoint - 2026-11-03]].
+
 ## Release dates
 
 | Version | Date |
@@ -93,3 +99,4 @@ Related: [[Modules/BackupAggregator]], [[Strategy Checkpoint - 2026-10-20]].
 | `v0.2.3` | 2026-10-17 (tag date is that of commit `5705aa5`; release published October 18–19 per the October 20 checkpoint) |
 | `v0.2.4` | 2026-10-19 |
 | `v0.3.0` | 2026-10-27 |
+| `v0.4.0` | 2026-11-03 |

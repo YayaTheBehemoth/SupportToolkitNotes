@@ -1,6 +1,6 @@
 # BackupHealth
 
-**Status: implemented; retirement decided 2026-11-02.** The code is still on `main` (`v0.3.0`) until a separate removal change. BackupAggregator now covers the backup visibility that was needed, so BackupHealth's planned deeper Acronis health analysis will not be pursued. The removal keeps the shared Acronis resource-status provider, which BackupAggregator uses, and must keep existing configuration files with a `backup-health` profile entry loadable. The history below is kept as a record.
+**Status: removed in `v0.4.0` (November 3, commit `53a0d24`).** Retirement was decided on November 2. BackupAggregator now covers the backup visibility that was needed, so BackupHealth's planned deeper Acronis health analysis will not be pursued. The removal keeps the shared Acronis resource-status provider, which BackupAggregator uses, and must keep existing configuration files with a `backup-health` profile entry loadable. The history below is kept as a record.
 
 Acronis health workflow: retrieve resource and diagnostic information, normalize a snapshot, evaluate exceptions and present results in the console. The source README documents a **48-hour stale-backup threshold**.
 

@@ -1,6 +1,6 @@
 # BackupAggregator
 
-**Status (2026-11-02):** Released in `v0.3.0` (October 27) with Business Central monitoring scope: the scoped review is now on `main` and is the only review the interactive console offers. Further work (in-progress wait, stray-tenant check, usage probes) is on the unmerged `feature/scope-visibility-wait-usage-probe` branch. See [[#Release v0.3.0 — monitoring scope on main]] and [[#Branch: scope visibility, in-progress wait and usage probes]]. Sections below dated before October 27 describe earlier states.
+**Status (2026-11-02):** Released in `v0.3.0` (October 27) with Business Central monitoring scope: the scoped review is now on `main` and is the only review the interactive console offers. The in-progress wait, stray-tenant check and usage probes were merged and released in `v0.4.0` (November 3), which also added a Backup Aggregator page to the local web UI (not yet run in production mode). See [[#Release v0.3.0 — monitoring scope on main]] and [[#Branch: scope visibility, in-progress wait and usage probes]]. Sections below dated before October 27 describe earlier states.
 
 ## Motivation and early discovery
 Replace manual review of numerous Acronis backup PDFs with tenant-grouped exceptions. Early experiments grouped multiple activities per resource and selected the latest relevant outcome. Activity lifecycle state `completed` is not equivalent to success. Pagination, stable identity and timestamps are essential.
@@ -296,7 +296,7 @@ The `feature/business-central-monitoring-scope` branch was merged and released. 
 
 ## Branch: scope visibility, in-progress wait and usage probes
 
-**Source:** `feature/scope-visibility-wait-usage-probe` at `2fea460` (October 29–30). Unmerged and unreleased; source-confirmed by reading the branch README diff and file list.
+**Source:** `feature/scope-visibility-wait-usage-probe` at `2fea460` (October 29–30); merged into `main` on November 2 and released in `v0.4.0`. Source-confirmed by reading the README.
 
 - **In-progress wait:** in production, a review waits for resources Acronis reports as running and re-reviews only the affected tenants, up to a configurable maximum (defaults 1800 s, poll 30 s; `0` disables). Resources still running at the end stay In progress and are counted as pending, never healthy. Single-tenant review does not wait.
 - **Scoped ticket gate relaxed for unmatched tenants only:** unmatched tenants no longer block a scoped ticket. The ticket then carries an `INCOMPLETE SCOPE` banner and subject prefix and lists them. All other open scope issues still block.

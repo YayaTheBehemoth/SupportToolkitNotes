@@ -1,6 +1,6 @@
 # Zendesk Bulk Delete
 
-**Status (2026-11-02):** Scoped and designed. **Nothing is implemented.** No Zendesk deletion code exists in SupportToolkit, and no deletion has been tested against any Zendesk instance.
+**Status (2026-11-03):** Implemented and released in `v0.4.0` as `dev zendesk-bulk-delete` and a page in the local web UI. Real deletion has been exercised **only in a personal sandbox** with test tickets. Not used against an organizational Zendesk. See [[#Implementation — v0.4.0]].
 
 ## Problem
 
@@ -58,12 +58,27 @@ Consequence for this use case: a former customer's tickets will typically be a *
 | Preview shows breakdowns by organization and requester domain. | Email-domain and free-text keys can catch other customers' tickets; strays must surface as exceptions. |
 | The tool does not check the retention policy itself. | It cannot know the relationship end date; the operator confirms it. |
 | A deletion receipt per run (search, operator, time, counts, ticket IDs; no ticket content). **Decided 2026-11-02.** | Archived tickets can only be restored through the API by ID within 30 days, so the receipt's ID list is the recovery path. It also gives the operator evidence afterwards. |
-| GUI: a separate WPF project referencing the existing project, containing only this module. Workflow stays UI-independent with a CLI path for development. | A GUI is required for this module. One module's need does not justify a platform-wide UI. See [[Architecture and Decisions]]. |
+| GUI: a separate WPF project referencing the existing project, containing only this module. *Superseded 2026-11-03: implemented as a page in the local web UI instead.* | A GUI is required for this module. See [[Architecture and Decisions]]. |
 
 ## Testing plan
 
 1. Fake HTTP handler tests for search completeness, ID handling, closed-only rules and confirmation logic.
 2. A personal Zendesk trial with synthetic tickets for the real API contract and the audit-log observation.
 3. One supervised production run on tickets the stakeholder has approved for deletion. The set should include both tickets closed more than 120 days ago and recently closed ones, so both deletion behaviours are observed. No sandbox is available.
+
+## Implementation — v0.4.0
+
+Source-confirmed from the README at `e788796`.
+
+- **Separate connection:** `connections.zendeskDeletion` and profile `zendeskDeletionConnection`; public client, no secret, scope `read tickets:write`, no environment overrides. Ticketing and deletion share no client, credential or token.
+- **Sign-in:** PKCE (S256), loopback listener on a free port, redirect `http://localhost:{port}`; token in memory only; no silent re-authentication.
+- **Search keys:** `--organization`, `--sender` (requester name), `--requester` (email), `--domain`, `--text`; combined with AND, always `type:ticket`; at least one key required. `--domain` uses `requester:*@domain`, which Zendesk's documentation suggests may not work; **unverified**.
+- **Completeness:** results de-duplicated; reported count compared with unique tickets; mismatch or more than 1,000 is an **INCOMPLETE SEARCH**, exit code 2, never deletable.
+- **Preview:** status counts, organization and requester-domain breakdowns, non-closed tickets as unselected exceptions, tickets updated less than 24 hours ago flagged and never selectable (missing time treated as too recent). Name lookups that fail are shown as unknown.
+- **Deletion:** frozen ID list printed first; only those IDs are sent; first typed confirmation of the count, second typed count for any non-closed tickets; `--dry-run` shows the exact requests; `destroy_many` starts a background job per up to 100 tickets, each followed to its end; no automatic retries. A ticket is *Deleted* only when Zendesk's job reports it; anything unclear is *Unknown*, the run stops, the rest are *Not attempted*, exit code 2.
+- **Receipt:** written before the first request (no receipt, no deletion) and rewritten at the end, including stopped or cancelled runs. Records instance, operator, search, time, confirmations, and each ticket's ID, planned status, outcome and job ID. No subjects or content.
+- **Web page:** same rules through `BulkDeleteReviewSession`; deletion runs in the background, so reloading or closing the tab does not stop it; Exit stops it cleanly and writes the receipt.
+
+Not recorded in Notes yet: what the Zendesk audit log shows for these deletions, and whether the public client's leftover secret can obtain a token.
 
 Related: [[Ticketing and Configuration]], [[Architecture and Decisions]], [[Roadmap]], [[Documentation Checkpoint - 2026-11-02]].

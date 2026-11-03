@@ -1,6 +1,6 @@
 # Architecture and Decisions
 
-## Current architecture (`main` at `v0.3.0`)
+## Current architecture (`main` at `v0.4.0`)
 
 ~~~text
 src/SupportToolkit/
@@ -9,8 +9,9 @@ src/SupportToolkit/
   Ui/Interactive/
   Core/{Configuration,CustomerMapping,ErrorHandling,Logging,Modules,
        MonitoringScope,Reconciliation,Secrets,Ticketing}/
-  Modules/{BackupAggregator,BackupHealth}/      # BackupHealth: retirement decided 2026-11-02
+  Modules/{BackupAggregator,ZendeskBulkDelete}/
   Providers/{Acronis,BusinessCentral,Zendesk}/
+  Ui/{Interactive,Web}/                         # Web: Blazor Server, loopback only
 tests/SupportToolkit.Tests/
 ~~~
 
@@ -39,9 +40,12 @@ Providers own external API details; modules own operational workflows; Core owns
 | Scoped review is separate and opt-in | Default review and ticketing must not depend on unvalidated entitlement logic | Superseded in `v0.3.0`: the interactive console offers only the scoped review; the all-tenant review remains a command |
 | Automatic name-based customer-to-tenant matching, nothing stored | No shared identifier exists; unique strong matches only, ambiguous and conflicting cases stay visible | Implemented (`v0.3.0`); supersedes the October 14 guidance below |
 | Explicit Zendesk submitter and requester per connection | With client credentials, tickets would otherwise be attributed to the user who created the OAuth client | Implemented (`v0.3.0`) |
-| Retire BackupHealth | BackupAggregator covers the needed visibility | Decided 2026-11-02; code not yet removed |
-| GUI for the Zendesk deletion module only (separate WPF project) | One concrete workflow requires a GUI; no platform-wide UI | Decided 2026-11-02; not built |
-| Zendesk deletion uses per-user PKCE, its own narrow interface | The acting operator is the identity; the ticket-creation credential is not widened | Decided 2026-11-02; not built |
+| Retire BackupHealth | BackupAggregator covers the needed visibility | Implemented (`v0.4.0`) |
+| GUI for the Zendesk deletion module only (separate WPF project) | One concrete workflow requires a GUI; no platform-wide UI | Superseded 2026-11-03 by the local web UI |
+| Local web UI inside the CLI (`serve`), loopback only, launch token to `HttpOnly` cookie, Host and Origin checks | The console was hard to hand to colleagues; one executable; both interfaces share session rules | Implemented (`v0.4.0`) |
+| Enforce layering with `LayeringTests` instead of a library/host split | Keeps workflows free of console and UI framework code without restructuring projects | Implemented (`v0.4.0`) |
+| Preserve unrecognised settings on save | A newer or hand-edited configuration must not lose settings an older build does not know | Implemented (`v0.4.0`) |
+| Zendesk deletion uses per-user PKCE and its own connection and OAuth client | The acting operator is the identity; the ticket-creation credential is not widened | Implemented (`v0.4.0`); sandbox-validated only |
 
 ## Zendesk destination architecture — 2026-10-13
 
@@ -135,3 +139,14 @@ The Zendesk deletion module needs a GUI. The interactive shell is already a pres
 **Also decided:** retire BackupHealth as a separate change before the deletion module. Keep the Acronis resource-status provider (BackupAggregator uses it) and keep older configuration files loadable.
 
 See [[Modules/Zendesk Bulk Delete]] and [[Documentation Checkpoint - 2026-11-02]].
+
+## November 3 — Local web UI replaces the WPF plan
+
+The November 2 plan (separate WPF project for the deletion module only) was not built. `v0.4.0` instead adds `serve`: a Blazor Server UI inside the existing executable, listening on `127.0.0.1` only, with pages for Profile, Backup Aggregator and Zendesk bulk delete.
+
+- **Why:** the console was hard to hand to colleagues; a browser UI keeps one executable and does not cost the console. Both interfaces are thin adapters over the same sessions (`BackupReviewSession`, `BulkDeleteReviewSession`), so the rules cannot diverge.
+- **Structure:** still one project. `LayeringTests` enforce that `Core`, `Providers` and `Modules` use no console, no `Ui`/`Cli` references and no UI framework. The library/host split remains deferred.
+- **Security:** launch token exchanged for an `HttpOnly`, `SameSite=Strict` cookie; loopback `Host` check against DNS rebinding; same-origin check for state changes and WebSockets; no external assets; secrets never sent to the browser.
+- **Boundary:** a local, single-operator presentation layer. It is not a decision on hosting, scheduling, persistence or multi-user use, which stay deferred under the October 20 checkpoint.
+
+See [[Documentation Checkpoint - 2026-11-03]].
