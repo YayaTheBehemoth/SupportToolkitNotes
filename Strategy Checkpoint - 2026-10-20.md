@@ -2,6 +2,8 @@
 
 **Status:** Design decisions and roadmap guidance; not authorization to change the SupportToolkit code repository.
 
+*Superseded:* priorities are replaced by [[Strategy Checkpoint - 2026-11-20]]; the deployment deferral below still stands.
+
 *Later state:* the engineering snapshot below is historical. `v0.3.0` (October 27) released the Business Central monitoring scope, and on November 2 a GUI was decided for one module only. See [[Documentation Checkpoint - 2026-11-02]]. The deployment deferral itself still stands.
 
 ## Why this checkpoint matters

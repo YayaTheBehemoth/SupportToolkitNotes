@@ -46,6 +46,10 @@ Providers own external API details; modules own operational workflows; Core owns
 | Enforce layering with `LayeringTests` instead of a library/host split | Keeps workflows free of console and UI framework code without restructuring projects | Implemented (`v0.4.0`) |
 | Preserve unrecognised settings on save | A newer or hand-edited configuration must not lose settings an older build does not know | Implemented (`v0.4.0`) |
 | Zendesk deletion uses per-user PKCE and its own connection and OAuth client | The acting operator is the identity; the ticket-creation credential is not widened | Implemented (`v0.4.0`); sandbox-validated only |
+| Secret store chosen per platform in `Composition/`: Windows Credential Manager on Windows, read-only environment variables elsewhere | Run on Linux without ever writing a secret to disk in plain text | Implemented on `feature/linux-dev` (November 2026) |
+| Refuse connections whose secrets map to the same environment variable | Never send one connection's secret to another | Implemented on `feature/linux-dev` |
+| Web UI stays loopback-only; remote Linux machines and codespaces use a same-port localhost tunnel | Keeps the Host and Origin guards; network hosting remains a separate, unmade decision | Decided November 20 |
+| Prove the provider-agnostic architecture with self-hosted second providers, measured by files changed outside each provider's folder | The architecture, not any vendor, is the point; the measure shows whether the seams hold | Decided November 19; see [[Strategy Checkpoint - 2026-11-20]] |
 
 ## Zendesk destination architecture — 2026-10-13
 

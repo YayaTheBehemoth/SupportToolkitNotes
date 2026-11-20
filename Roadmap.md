@@ -4,6 +4,19 @@ Working backlog, not commitments.
 
 Implementation status is grounded in the SupportToolkit source repository and tests. Discovery and architectural findings are tracked in these notes.
 
+## Added November 20, 2026
+
+Direction and reasons: [[Strategy Checkpoint - 2026-11-20]].
+
+- [x] Linux support: platform-chosen secret store, dev container, Ubuntu CI (branch `feature/linux-dev`).
+- [ ] Merge `feature/linux-dev` into `main` (owner's decision).
+- [ ] osTicket ticketing provider behind the ticket sink. Measure: files changed outside the provider's folder, plus layering rules added.
+- [ ] Duplicati backup provider behind the Backup Aggregator's sources.
+- [ ] Dolibarr commercial-entitlement provider behind the monitoring scope and usage-report billing.
+- [ ] Fleet + osquery compliance provider.
+- [ ] Record `v0.4.1` in a documentation checkpoint (usage report, architecture refactor with `Composition/` and `Domain/`); these notes stop at `v0.4.0`.
+- [ ] Refresh the "Current architecture" tree in [[Architecture and Decisions]], which still shows `v0.4.0`.
+
 ## Updated November 3, 2026 (`v0.4.0`)
 
 - [x] Remove BackupHealth (`v0.4.0`).

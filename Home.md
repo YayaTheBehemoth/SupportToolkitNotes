@@ -6,7 +6,9 @@ Notes on architecture, modules, API discovery, development history and roadmap.
 
 ## Latest decisions
 
-Start with [[Documentation Checkpoint - 2026-11-03]] for the current state (`v0.4.0`): the local web UI, Zendesk bulk delete and the removal of BackupHealth. [[Documentation Checkpoint - 2026-11-02]] records the decisions that led there. [[Strategy Checkpoint - 2026-10-20]] still holds the priorities and the decision to defer a universal deployment architecture. Older notes may describe historical states.
+For priorities and direction, start with [[Strategy Checkpoint - 2026-11-20]]: second providers in a Linux lab as the test of the provider-agnostic architecture, and Linux support as its prerequisite. For the current state, see the source repository itself.
+
+Earlier: [[Documentation Checkpoint - 2026-11-03]] for the current state (`v0.4.0`): the local web UI, Zendesk bulk delete and the removal of BackupHealth. [[Documentation Checkpoint - 2026-11-02]] records the decisions that led there. [[Strategy Checkpoint - 2026-10-20]] still holds the priorities and the decision to defer a universal deployment architecture. Older notes may describe historical states.
 
 ## Where things are
 
