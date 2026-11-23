@@ -9,7 +9,7 @@ Implementation status is grounded in the SupportToolkit source repository and te
 Direction and reasons: [[Strategy Checkpoint - 2026-11-20]].
 
 - [x] Linux support: platform-chosen secret store, dev container, Ubuntu CI (branch `feature/linux-dev`).
-- [ ] Merge `feature/linux-dev` into `main` (owner's decision).
+- [x] Merge `feature/linux-dev` into `main` (owner's decision). Merged and released as `v0.5.0` on 2026-11-23.
 - [x] osTicket ticketing provider behind a provider-neutral ticketing target (branch `feature/osticket-provider`, lab-validated). Measure: 29 files outside the provider's folder, no layering rules. See [[Development Journal - 2026-11-20]].
 - [x] Providers can own their connection settings (`IProviderConnections`, `ProviderSettings`); osTicket moved out of Core. A further ticketing system now changes its provider folder plus one entry in each of two composition registries. Acronis, Zendesk and Business Central stay in Core by decision.
 - [ ] Configure osTicket in the profile wizard (it is set in the configuration file for now).
@@ -20,8 +20,11 @@ Direction and reasons: [[Strategy Checkpoint - 2026-11-20]].
 - [ ] Dolibarr behind the usage report's billing source (deferred by decision; the usage report compares billing with Acronis storage).
 - [ ] Provider-neutral wording in the monitoring-scope report ("Acronis tenants", "Entitled BC customers").
 - [ ] Fleet + osquery compliance provider. **Deferred (decided November 20):** compliance exists only on the unfinished `feature/compliance-investigation` branch, built directly on Microsoft Graph interfaces with no provider-neutral seam. Fleet waits until that module is reworked to the shape of the other seams (selection, composition registry, provider-owned settings).
-- [ ] Record `v0.4.1` in a documentation checkpoint (usage report, architecture refactor with `Composition/` and `Domain/`); these notes stop at `v0.4.0`.
-- [ ] Refresh the "Current architecture" tree in [[Architecture and Decisions]], which still shows `v0.4.0`.
+- [ ] Record `v0.4.1` in a documentation checkpoint (usage report, architecture refactor with `Composition/` and `Domain/`); these notes stop at `v0.4.0`. It should now cover `v0.5.0` as well.
+- [ ] Refresh the "Current architecture" tree in [[Architecture and Decisions]], which still shows `v0.4.0`. It should now show `v0.5.0`.
+- [ ] Stamp the version from the release tag into the exe, and show it in the web UI and `--help`. (After `v0.5.0`, an old exe was mistaken for a regression in the usage report, because the exe does not show its version.)
+- [ ] A clear "LAB" marker in the console and web UI when the `lab` profile is active (proposed, not decided).
+- [ ] Add the usage-report readability change to the `v0.5.0` row of the source README's Release history (missing from the release notes).
 
 ## Updated November 3, 2026 (`v0.4.0`)
 

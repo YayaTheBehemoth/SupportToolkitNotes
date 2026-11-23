@@ -100,6 +100,7 @@ To make switching between production and the lab simple:
 - Status, the profile page and the Backup Aggregator page name the systems the active profile uses; the Backup Aggregator's production banner had always said "Acronis and Business Central".
 - The installed exe reaches the lab while the codespace runs, through ports forwarded to the same numbers on the operator's computer.
 - The wizard no longer asks for an Acronis connection for a profile that reviews another backup system.
+- *Later:* on November 23, `feature/linux-dev` was merged into `main` and released as `v0.5.0`.
 
 **Finding from a fresh lab run:** Dolibarr answers an empty customer list with `404 "Not Found: No third parties found"`, not `[]` as for contracts. The provider treated it as a failure; only that exact answer now means "empty", and any other 404 still fails.
 
