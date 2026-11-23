@@ -10,10 +10,16 @@ Direction and reasons: [[Strategy Checkpoint - 2026-11-20]].
 
 - [x] Linux support: platform-chosen secret store, dev container, Ubuntu CI (branch `feature/linux-dev`).
 - [ ] Merge `feature/linux-dev` into `main` (owner's decision).
-- [ ] osTicket ticketing provider behind the ticket sink. Measure: files changed outside the provider's folder, plus layering rules added.
-- [ ] Duplicati backup provider behind the Backup Aggregator's sources.
-- [ ] Dolibarr commercial-entitlement provider behind the monitoring scope and usage-report billing.
-- [ ] Fleet + osquery compliance provider.
+- [x] osTicket ticketing provider behind a provider-neutral ticketing target (branch `feature/osticket-provider`, lab-validated). Measure: 29 files outside the provider's folder, no layering rules. See [[Development Journal - 2026-11-20]].
+- [x] Providers can own their connection settings (`IProviderConnections`, `ProviderSettings`); osTicket moved out of Core. A further ticketing system now changes its provider folder plus one entry in each of two composition registries. Acronis, Zendesk and Business Central stay in Core by decision.
+- [ ] Configure osTicket in the profile wizard (it is set in the configuration file for now).
+- [ ] Document the `ticketing` profile setting in the source README.
+- [x] Duplicati backup provider behind the Backup Aggregator's sources (branch `feature/duplicati-provider`, lab-validated). A third backup system now needs its provider folder, its module adapter and one entry in each of two composition registries. See [[Development Journal - 2026-11-20]].
+- [ ] Configure a profile's `backup` and `ticketing` settings in the wizard (set in the configuration file for now).
+- [x] Dolibarr commercial-entitlement provider behind the monitoring scope (branch `feature/dolibarr-provider`, lab-validated). A further commercial system now needs its provider folder and one entry in each of two composition registries. See [[Development Journal - 2026-11-20]].
+- [ ] Dolibarr behind the usage report's billing source (deferred by decision; the usage report compares billing with Acronis storage).
+- [ ] Provider-neutral wording in the monitoring-scope report ("Acronis tenants", "Entitled BC customers").
+- [ ] Fleet + osquery compliance provider. **Deferred (decided November 20):** compliance exists only on the unfinished `feature/compliance-investigation` branch, built directly on Microsoft Graph interfaces with no provider-neutral seam. Fleet waits until that module is reworked to the shape of the other seams (selection, composition registry, provider-owned settings).
 - [ ] Record `v0.4.1` in a documentation checkpoint (usage report, architecture refactor with `Composition/` and `Domain/`); these notes stop at `v0.4.0`.
 - [ ] Refresh the "Current architecture" tree in [[Architecture and Decisions]], which still shows `v0.4.0`.
 

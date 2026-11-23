@@ -87,6 +87,9 @@ Related: [[Modules/BackupAggregator]], [[Strategy Checkpoint - 2026-10-20]].
 - November 2: bulk delete implemented with PKCE sign-in, selection and receipts, and BackupHealth removed (`53a0d24`); UI-agnostic ticket preparation, `BackupReviewSession` and `LayeringTests` (`9100fd3`); usage-probe branch merged.
 - November 2–3: local web UI (`cded2a1` onward): launch-token security, Backup Aggregator and Zendesk bulk delete pages, Simple / Detailed view; unrecognised settings kept on save; `configure import` and zip launchers.
 - November 3: **`v0.4.0` released**; all feature branches except compliance merged and deleted. The WPF plan from November 2 was replaced by the web UI. See [[Documentation Checkpoint - 2026-11-03]].
+- November 19–20: Linux support on `feature/linux-dev` (platform-chosen secret store, dev container, Ubuntu CI). See [[Strategy Checkpoint - 2026-11-20]].
+- November 20: osTicket ticketing provider on `feature/osticket-provider`, behind a provider-neutral ticketing target, discovered and verified in a Codespace lab. See [[Development Journal - 2026-11-20]].
+- November 20: Duplicati (backup) and Dolibarr (commercial entitlement) providers; all three second-provider branches merged into `feature/linux-dev`; `lab/up.sh` and `configure lab`. Fleet + osquery deferred. See [[Development Journal - 2026-11-20]].
 
 ## Release dates
 

@@ -49,6 +49,9 @@ Providers own external API details; modules own operational workflows; Core owns
 | Secret store chosen per platform in `Composition/`: Windows Credential Manager on Windows, read-only environment variables elsewhere | Run on Linux without ever writing a secret to disk in plain text | Implemented on `feature/linux-dev` (November 2026) |
 | Refuse connections whose secrets map to the same environment variable | Never send one connection's secret to another | Implemented on `feature/linux-dev` |
 | Web UI stays loopback-only; remote Linux machines and codespaces use a same-port localhost tunnel | Keeps the Host and Origin guards; network hosting remains a separate, unmade decision | Decided November 20 |
+| One provider-neutral ticketing target in Core; `Composition/` alone maps a system name to its provider | A second ticketing system without changing the workflow or its sessions | Implemented on `feature/osticket-provider` (November 20) |
+| A profile selects its ticketing system in one `ticketing` setting; the older Zendesk settings still load, and `ticketing` wins | Provider-neutral selection without breaking saved configurations | Implemented on `feature/osticket-provider` |
+| For a system without idempotency (osTicket), never retry, and report every unclear outcome as not confirmed | A retry would create a duplicate ticket | Implemented on `feature/osticket-provider` |
 | Prove the provider-agnostic architecture with self-hosted second providers, measured by files changed outside each provider's folder | The architecture, not any vendor, is the point; the measure shows whether the seams hold | Decided November 19; see [[Strategy Checkpoint - 2026-11-20]] |
 
 ## Zendesk destination architecture — 2026-10-13
