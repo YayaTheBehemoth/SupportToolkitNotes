@@ -157,3 +157,17 @@ The November 2 plan (separate WPF project for the deletion module only) was not 
 - **Boundary:** a local, single-operator presentation layer. It is not a decision on hosting, scheduling, persistence or multi-user use, which stay deferred under the October 20 checkpoint.
 
 See [[Documentation Checkpoint - 2026-11-03]].
+
+## November 25 — Modules follow the profile's capability selection; access is per purpose
+
+SupportToolkit is an operational toolkit: it connects to a system for a purpose. Modules that share a capability must agree on the system.
+
+**Decision:**
+
+- A profile selects one system per capability (`ticketing`, `backup`, `commercial`), and every module that needs that capability uses that system. Bulk delete follows `ticketing`; the usage report is to follow `backup` and `commercial`. A separate per-module selection was proposed and withdrawn, because it would let a profile send tickets to one system and delete in another.
+- **Same system and instance, separate access per purpose.** Deleting uses access kept apart from the access that creates tickets (for Zendesk, a separate deletion connection; for Zammad, a separate token). This is a security requirement, not an architectural preference, and the code must accommodate it. A deletion access for a different instance is refused.
+- An operation the selected system cannot do is reported as unavailable or unknown. It never falls back to another system.
+- Enforced in code (a module gets its system only through the selection), not left to configuration discipline.
+- Production behaviour stays as it is while the seams change underneath.
+
+See [[Development Journal - 2026-11-26]].

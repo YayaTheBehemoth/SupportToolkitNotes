@@ -4,6 +4,21 @@ Working backlog, not commitments.
 
 Implementation status is grounded in the SupportToolkit source repository and tests. Discovery and architectural findings are tracked in these notes.
 
+## Added November 26, 2026
+
+See [[Development Journal - 2026-11-26]] and [[Architecture and Decisions]] (November 25).
+
+- [x] Zammad replaces osTicket in the lab (osTicket's API cannot delete tickets); seeded with the lab's companies and a bulk-delete customer.
+- [x] Zammad ticketing provider (branch `feature/zammad-provider`, lab-validated). Measure: 3 files outside the provider's folder.
+- [x] Bulk delete follows the profile's `ticketing` system; each system declares its deletion rules; Zendesk unchanged.
+- [x] Bulk delete on Zammad with a separate deletion token, exact-match search and ticket numbers (lab-validated).
+- [ ] Merge `feature/zammad-provider` into `main` (owner's decision).
+- [ ] The usage report follows the profile's `backup` and `commercial` settings, so the review and the usage report read the same backup data; Duplicati usage (storage per customer) and Dolibarr billing lines as lab sources. Production behaviour unchanged. Supersedes the deferred Dolibarr usage item below.
+- [ ] Decide how the lab stands in for the production backup system's usage reads (second system only, or also a stand-in that answers like it).
+- [ ] Investigate the usage report's storage-conversion discrepancy seen during a demo (parked, separate from the lab).
+- [ ] Zammad ticket text in the bulk-delete preview (one extra call per ticket; left out for now).
+- [ ] Configure a Zammad connection (including `bulkDelete` and its deletion token) in the profile wizard; set in the configuration file or by `configure lab` for now.
+
 ## Added November 20, 2026
 
 Direction and reasons: [[Strategy Checkpoint - 2026-11-20]].
