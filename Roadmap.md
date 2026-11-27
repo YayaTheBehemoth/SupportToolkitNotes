@@ -13,7 +13,9 @@ See [[Development Journal - 2026-11-26]] and [[Architecture and Decisions]] (Nov
 - [x] Bulk delete follows the profile's `ticketing` system; each system declares its deletion rules; Zendesk unchanged.
 - [x] Bulk delete on Zammad with a separate deletion token, exact-match search and ticket numbers (lab-validated).
 - [ ] Merge `feature/zammad-provider` into `main` (owner's decision).
-- [ ] The usage report follows the profile's `backup` and `commercial` settings, so the review and the usage report read the same backup data; Duplicati usage (storage per customer) and Dolibarr billing lines as lab sources. Production behaviour unchanged. Supersedes the deferred Dolibarr usage item below.
+- [x] The usage report follows the profile's `backup` and `commercial` settings, so the review and the usage report read the same backup data; Duplicati usage (storage per customer) and Dolibarr billing lines as lab sources. Production behaviour unchanged (lab-validated November 27). Supersedes the deferred Dolibarr usage item below. See [[Development Journal - 2026-11-27]].
+- [x] Bulk delete: search by ticket number, and a link to each ticket in its system, for every ticketing system (validated in the lab and against production Zendesk).
+- [ ] Merge into `main` and release, so other operators get the bulk delete features (owner's decision).
 - [ ] Decide how the lab stands in for the production backup system's usage reads (second system only, or also a stand-in that answers like it).
 - [ ] Investigate the usage report's storage-conversion discrepancy seen during a demo (parked, separate from the lab).
 - [ ] Zammad ticket text in the bulk-delete preview (one extra call per ticket; left out for now).

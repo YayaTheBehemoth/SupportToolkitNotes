@@ -92,6 +92,7 @@ Related: [[Modules/BackupAggregator]], [[Strategy Checkpoint - 2026-10-20]].
 - November 20: Duplicati (backup) and Dolibarr (commercial entitlement) providers; all three second-provider branches merged into `feature/linux-dev`; `lab/up.sh` and `configure lab`. Fleet + osquery deferred. See [[Development Journal - 2026-11-20]].
 - November 23: `feature/linux-dev` merged into `main` (`820f5fa`); **`v0.5.0` released** (Windows x64 prerelease), including the usage-report readability change (comparison in the Acronis portal's GB). Day-to-day development moves to the local Windows machine; the Codespace is used for the lab only. The lab also runs on the local Windows machine in WSL, with start and stop scripts.
 - November 25–26: on `feature/zammad-provider`, Zammad replaces osTicket in the lab; Zammad ticketing provider; bulk delete renamed and made to follow the profile's ticketing system, with each system declaring its deletion rules; bulk delete on Zammad with a separate deletion token. Decision: modules follow the profile's capability selection, with access kept apart per purpose. See [[Development Journal - 2026-11-26]].
+- November 26–27: bulk delete gains ticket-number search and per-ticket links for every system (validated in the lab and against production Zendesk); the usage report follows the profile's backup and commercial systems, with Duplicati and Dolibarr as lab sources. See [[Development Journal - 2026-11-27]].
 
 ## Release dates
 
